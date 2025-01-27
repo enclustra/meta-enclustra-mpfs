@@ -1,5 +1,5 @@
 header:
-    version: 8
+    version: 14
 
 machine: me-mp1-250-ees-d3e
 
@@ -14,23 +14,21 @@ repos:
 
     bitbake:
         url: "https://git.openembedded.org/bitbake"
-        refspec: 73fa376d6502ab6f2cccfb25a1193d9b1c3c3bc8
+        commit: 40fd5f4eef7460ca67f32cfce8e229e67e1ff607
         layers:
             .: excluded
 
     openembedded-core:
         url: "https://git.openembedded.org/openembedded-core"
-        refspec: f4dbdb9774eb61a71289fe91b017b4caf9c34b16
+        commit: 077aab43f2c928eb8da71934405c62327010f552
         layers:
             meta:
 
-    meta-riscv:
-        url: "https://github.com/riscv/meta-riscv"
-        refspec: 18227c1de0a56327a22b94b2594fbeb45c1dfcff
-
     meta-polarfire-soc-yocto-bsp:
         url: "https://github.com/polarfire-soc/meta-polarfire-soc-yocto-bsp"
-        refspec: v2022.09
+        commit: 4bb061e61cc9e9d3889221a0cb4a42d99033ee6d
+        layers:
+            meta-polarfire-soc-bsp:
 
     meta-enclustra-mpfs:
         layers:
@@ -38,7 +36,7 @@ repos:
 
     meta-openembedded:
         url: https://git.openembedded.org/meta-openembedded
-        refspec: 3ab9736fc6bfcc7f600479fd87dff32219d789e2
+        commit: de8681b4a2a101b99dd2c48d89a7de2ccd9a961f
         layers:
             meta-oe:
             meta-python:
@@ -48,7 +46,7 @@ repos:
 
     meta-security:
         url: https://git.yoctoproject.org/meta-security
-        refspec: 59295103f1f87b207e5c3e154e6ad01291e1f9df
+        commit: b9cf9cd639bc8d1b4828eb0bd012b71486d35176
         layers:
             meta-tpm:
 
@@ -56,12 +54,11 @@ local_conf_header:
     meta-enclustra-mpfs: |
         PACKAGE_CLASSES ?= "package_ipk"
         PATCHRESOLVE = "noop"
-        BBMASK:append = " opensbi_0.9.bb"
         EXTRA_IMAGE_FEATURES:append = " ssh-server-dropbear"
         EXTRA_IMAGE_FEATURES:append = " debug-tweaks"
         require conf/distro/include/no-static-libs.inc
         require conf/distro/include/yocto-uninative.inc
         require conf/distro/include/security_flags.inc
         INHERIT:append = " uninative"
-        DISTRO_FEATURES:append = " largefile systemd tpm "
+        DISTRO_FEATURES:append = " largefile systemd tpm pam "
         VIRTUAL-RUNTIME_init_manager = "systemd"
