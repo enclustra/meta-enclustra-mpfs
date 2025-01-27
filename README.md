@@ -62,12 +62,8 @@ See [Yocto System Requirements](https://docs.yoctoproject.org/3.4.2/ref-manual/s
 
 The product model can be specified as target device (variable: **MACHINE**). Following product models are supported:
 
-- me-mp1-250-ees-d3e
-- me-mp1-250-ees-d3e-e1
 - me-mp1-250-si-d3en
 - me-mp1-250-si-d3en-e1
-- me-mp1-460-1si-d4e
-- me-mp1-460-1si-d4e-e1
 
 ### Supported Enclustra Base Boards
 
@@ -97,7 +93,7 @@ The recommended build flow is to use kas, which is a Python based tool that prov
 
 #### Usage \#1
 
-Use following command to build the target specified in the build.yml file (default = me-mp1-250-ees-d3e). A base board can be specified optionally. If ENCLUSTRA_BASEBOARD variable is set, base board dependent devicetree settings are added to the kernel devicetree.
+Use following command to build the target specified in the build.yml file (default = me-mp1-250-si-d3en). A base board can be specified optionally. If ENCLUSTRA_BASEBOARD variable is set, base board dependent devicetree settings are added to the kernel devicetree.
 
     export ENCLUSTRA_BASEBOARD=pe3
     kas build build.yml
@@ -106,7 +102,7 @@ Use following command to build the target specified in the build.yml file (defau
 
 Use following command to specify the bitbake command to be executed. **MACHINE** and **ENCLUSTRA_BASEBOARD** variable can be overridden according to sections [Supported Machine Targets](#supported-machine-targets) and [Supported Enclustra Base Boards](#supported-enclustra-base-boards).
 
-    kas shell build.yml -c 'MACHINE=me-mp1-250-ees-d3e ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest'
+    kas shell build.yml -c 'MACHINE=me-mp1-250-si-d3en ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest'
 
 Note that the image [image-minimal-hwtest](meta-enclustra-mpfs/recipes-core/images/image-minimal-hwtest.bb) can be replaced by any available image recipe. Following are a few examples provided by openembedded-core layer:
 - core-image-base
@@ -121,11 +117,11 @@ The tool kas can be used to checkout the repositories and setup the build direct
     kas checkout kas-project.yml
     source openembedded-core/oe-init-build-env 
     export BB_ENV_EXTRAWHITE="ENCLUSTRA_BASEBOARD"
-    MACHINE=me-mp1-250-ees-d3e ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest
+    MACHINE=me-mp1-250-si-d3en ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest
 
 ## Deployment
 
-The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks](meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-me-mp1-250-ees-d3e.wic**.
+The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks](meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-me-mp1-250-si-d3en.wic**.
 
 To be able to boot Linux, the SoC must be programmed with the [bitstream](#fpga-reference-designs-for-microchip-libero) and [HSS](#hart-software-services).
 
@@ -133,7 +129,7 @@ To be able to boot Linux, the SoC must be programmed with the [bitstream](#fpga-
 
 Copy the image file to a SD card e.g.
 
-    dd if=image-minimal-hwtest-me-mp1-250-ees-d3e.wic of=<device> && sync
+    dd if=image-minimal-hwtest-me-mp1-250-si-d3en.wic of=<device> && sync
 
 Note that the device of the SD card (\<device\>) needs to be replaced with the SD card device on your host (e.g. /dev/sdd).
 
@@ -160,8 +156,8 @@ Following list show all devicetree include files added by meta-enclustra-mpfs:
 | File name                                                                                                                                | Description |
 |------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [enclustra_mercury_mp1_common.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_mp1_common.dtsi)                    | Common definitions that are valid for all Mercury+ MP1 product models |
-| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-ees-d3e/enclustra_mercury_mp1_fabric.dtsi) | Devicetree nodes in FPGA fabric |
-| [enclustra_mercury_mp1.dts](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-ees-d3e/enclustra_mercury_mp1.dts)                 | Top level devicetree. Contains nodes and properties that are specific to that product model as DDR4 memory size |
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-si-d3en/enclustra_mercury_mp1_fabric.dtsi) | Devicetree nodes in FPGA fabric |
+| [enclustra_mercury_mp1.dts](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dts)                 | Top level devicetree. Contains nodes and properties that are specific to that product model as DDR4 memory size |
 | [enclustra_mercury_pe1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe1.dtsi)                                  | Mercury+ PE1 base board specific devicetree properties |
 | [enclustra_mercury_pe3.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe3.dtsi)                                  | Mercury+ PE3 base board specific devicetree properties |
 | [enclustra_mercury_st1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_st1.dtsi)                                  | Mercury+ ST1 base board specific devicetree properties |
