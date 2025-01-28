@@ -1,14 +1,16 @@
 header:
     version: 14
 
-machine: me-mp1-250-si-d3en
+machine: refdes-me-mp1-250-si-d3en-pe1
+# machine: refdes-me-mp1-250-si-d3en-pe3
+# machine: refdes-me-mp1-250-si-d3en-st1
+# machine: refdes-me-mp1-250-si-d3en-e1-pe1
+# machine: refdes-me-mp1-250-si-d3en-e1-pe3
+# machine: refdes-me-mp1-250-si-d3en-e1-st1
 
 distro: nodistro
 
 target: image-minimal-hwtest
-
-env:
-    ENCLUSTRA_BASEBOARD: $ENCLUSTRA_BASEBOARD
 
 repos:
 
@@ -33,6 +35,7 @@ repos:
     meta-enclustra-mpfs:
         layers:
             meta-enclustra-mpfs:
+            meta-enclustra-refdes:
 
     meta-openembedded:
         url: https://git.openembedded.org/meta-openembedded
@@ -41,8 +44,6 @@ repos:
             meta-oe:
             meta-python:
             meta-networking:
-            meta-multimedia:
-            meta-webserver:
 
     meta-security:
         url: https://git.yoctoproject.org/meta-security

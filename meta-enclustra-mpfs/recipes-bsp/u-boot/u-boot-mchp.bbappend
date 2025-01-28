@@ -15,11 +15,12 @@ ENCLUSTRA_UBOOT_DTS_LIST = " \
     file://enclustra_mercury_mp1_common.dtsi \
     file://enclustra_mercury_mp1_common_fabric.dtsi \
     file://enclustra_mercury_mp1.dts \
+    file://enclustra_mercury_mp1.dtsi \
     file://enclustra_mercury_mp1-u-boot.dtsi \
     file://enclustra_mercury_mp1_fabric.dtsi \
     "
 
-ENCLUSTRA_UBOOT_COMMON_FILE_LIST = " \
+SRC_URI:append:me-mp1-generic := " \
     file://enclustra_mercury_mp1_defconfig \
     file://${UBOOT_ENV_SRC} \
     ${ENCLUSTRA_UBOOT_PATCH_LIST} \
@@ -27,25 +28,27 @@ ENCLUSTRA_UBOOT_COMMON_FILE_LIST = " \
     file://Si5338-RevB-Registers.h \
     "
 
-SRC_URI:append:me-mp1-250-si-d3en := " ${ENCLUSTRA_UBOOT_COMMON_FILE_LIST}"
-SRC_URI:append:me-mp1-250-si-d3en-e1 := " ${ENCLUSTRA_UBOOT_COMMON_FILE_LIST}"
-
-COMPATIBLE_MACHINE:append = " \
-    |me-mp1-250-si-d3en| \
-    |me-mp1-250-si-d3en-e1| \
-    "
+COMPATIBLE_MACHINE:append = " |me-mp1-generic|"
 
 do_add_enclustra_devicetree() {
-    if [ ${MACHINE} = "me-mp1-250-si-d3en" ] || \
-       [ ${MACHINE} = "me-mp1-250-si-d3en-e1"; then
-        cp ${WORKDIR}/enclustra_mercury_mp1_common.dtsi ${S}/arch/riscv/dts/
-        cp ${WORKDIR}/enclustra_mercury_mp1_common_fabric.dtsi ${S}/arch/riscv/dts/
-        cp ${WORKDIR}/enclustra_mercury_mp1.dts ${S}/arch/riscv/dts/
-        cp ${WORKDIR}/enclustra_mercury_mp1-u-boot.dtsi ${S}/arch/riscv/dts/
-        cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
-        cp ${WORKDIR}/enclustra_mercury_mp1_defconfig ${S}/configs/
-    fi
 }
+
+do_add_enclustra_devicetree:append:me-mp1-generic() {
+    cp ${WORKDIR}/enclustra_mercury_mp1_common.dtsi ${S}/arch/riscv/dts/
+    cp ${WORKDIR}/enclustra_mercury_mp1_common_fabric.dtsi ${S}/arch/riscv/dts/
+    cp ${WORKDIR}/enclustra_mercury_mp1.dts ${S}/arch/riscv/dts/
+    cp ${WORKDIR}/enclustra_mercury_mp1.dtsi ${S}/arch/riscv/dts/
+    cp ${WORKDIR}/enclustra_mercury_mp1-u-boot.dtsi ${S}/arch/riscv/dts/
+    cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
+}
+
+do_add_enclustra_config() {
+}
+
+do_add_enclustra_config:append:me-mp1-generic() {
+    cp ${WORKDIR}/enclustra_mercury_mp1_defconfig ${S}/configs/
+}
+
 
 do_add_clockgen_config() {
     if test -f "${WORKDIR}/Si5338-RevB-Registers.h"; then
@@ -55,4 +58,5 @@ do_add_clockgen_config() {
 }
 
 addtask do_add_enclustra_devicetree after do_patch before do_configure
+addtask do_add_enclustra_config after do_patch before do_configure
 addtask do_add_clockgen_config after do_unpack before do_patch

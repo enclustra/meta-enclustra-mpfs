@@ -4,8 +4,6 @@
  * <info@enclustra.com>
  */
 
-/dts-v1/;
-
 #include "enclustra_mercury_mp1_common.dtsi"
 
 / {

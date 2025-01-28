@@ -12,18 +12,20 @@ This Yocto layer depends on:
 
 URI: https://git.openembedded.org/openembedded-core<br>
 layers: meta<br>
-revision: f4dbdb9774eb61a71289fe91b017b4caf9c34b16
-
-URI: https://github.com/riscv/meta-riscv<br>
-revision: 18227c1de0a56327a22b94b2594fbeb45c1dfcff
+revision: 077aab43f2c928eb8da71934405c62327010f552
 
 URI: https://github.com/polarfire-soc/meta-polarfire-soc-yocto-bsp<br>
-tag: v2022.09<br>
-revision: 07438a5526dd33226d5341ae3a901c6ee0594dfd
+layers: meta-polarfire-soc-bsp<br>
+branch: v2024.09<br>
+revision: 4bb061e61cc9e9d3889221a0cb4a42d99033ee6d
 
 URI https://git.yoctoproject.org/meta-security<br>
 layers: meta-tpm<br>
-revision: 59295103f1f87b207e5c3e154e6ad01291e1f9df
+revision: b9cf9cd639bc8d1b4828eb0bd012b71486d35176
+
+URI https://git.openembedded.org/meta-openembedded<br>
+layers: meta-oe, meta-python, meta-networking<br>
+revision: de8681b4a2a101b99dd2c48d89a7de2ccd9a961f
 
 # Submit Patches / Reporting Bugs
 

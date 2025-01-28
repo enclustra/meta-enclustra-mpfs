@@ -4,6 +4,8 @@
  * <info@enclustra.com>
  */
 
+/* Devicetree include file for Mercury+ PE3 */
+
 &i2c1 {
 
 	i2c-mux@74 {
