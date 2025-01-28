@@ -1,18 +1,17 @@
-From a09ead1ccb849cb94822d3f34615c0ee717c69fa Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Mon, 28 Feb 2022 17:57:51 +0100
+From d1f8b1408293b86dde8180f6935a8598620fd1dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Mon, 27 Jan 2025 19:06:13 +0000
 Subject: [PATCH] PolarFire SoC I2C driver modification for zero sized
- transfers
 
 ---
  drivers/i2c/i2c-microchip.c | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/drivers/i2c/i2c-microchip.c b/drivers/i2c/i2c-microchip.c
-index e2a27a7d19..a83fc16dcd 100644
+index d82b80f535..97faf208ea 100644
 --- a/drivers/i2c/i2c-microchip.c
 +++ b/drivers/i2c/i2c-microchip.c
-@@ -380,9 +380,6 @@ static int mpfs_i2c_xfer_msg(struct mpfs_i2c_bus *bus, struct i2c_msg *msg)
+@@ -376,9 +376,6 @@ static int mpfs_i2c_xfer_msg(struct mpfs_i2c_bus *bus, struct i2c_msg *msg)
  	u8 ctrl;
  	int ret;
  
@@ -22,3 +21,6 @@ index e2a27a7d19..a83fc16dcd 100644
  	bus->addr = i2c_8bit_addr_from_msg(msg);
  	bus->msg_len = msg->len;
  	bus->buf = msg->buf;
+-- 
+2.34.1
+

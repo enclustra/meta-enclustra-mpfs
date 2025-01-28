@@ -1,24 +1,32 @@
-From 1a339e938bbc6be39360280fd7239b2458297f8c Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Tue, 18 Oct 2022 10:21:47 +0200
+From a72321e7c25346c87d4e7ce979e63c7df01f5b02 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Mon, 27 Jan 2025 19:18:41 +0000
 Subject: [PATCH] Use only high memory region
 
 ---
- arch/riscv/cpu/generic/dram.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/riscv/cpu/generic/dram.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/riscv/cpu/generic/dram.c b/arch/riscv/cpu/generic/dram.c
-index ea720900e1..7dfe318cc5 100644
+index 44e11bd56c..e93a3d429a 100644
 --- a/arch/riscv/cpu/generic/dram.c
 +++ b/arch/riscv/cpu/generic/dram.c
-@@ -23,7 +23,9 @@ int dram_init_banksize(void)
+@@ -23,6 +23,7 @@ int dram_init_banksize(void)
  
- ulong board_get_usable_ram_top(ulong total_size)
+ phys_size_t board_get_usable_ram_top(phys_size_t total_size)
  {
--#if !defined(CONFIG_TARGET_MICROCHIP_ICICLE) && !defined(CONFIG_TARGET_MICROCHIP_SEVKIT)
-+#if !defined(CONFIG_TARGET_MICROCHIP_ICICLE) && \
-+    !defined(CONFIG_TARGET_MICROCHIP_SEVKIT) && \
-+    !defined(CONFIG_TARGET_ENCLUSTRA_MERCURY_MP1)
++#if !defined(CONFIG_TARGET_ENCLUSTRA_MERCURY_MP1)
  	/*
  	 * Ensure that we run from first 4GB so that all
  	 * addresses used by U-Boot are 32bit addresses.
+@@ -33,6 +34,7 @@ phys_size_t board_get_usable_ram_top(phys_size_t total_size)
+ 	 */
+ 	if (gd->ram_top >= SZ_4G)
+ 		return SZ_4G - 1;
++#endif
+ 
+ 	return gd->ram_top;
+ }
+-- 
+2.34.1
+

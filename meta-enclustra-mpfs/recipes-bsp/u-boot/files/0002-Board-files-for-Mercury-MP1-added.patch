@@ -1,16 +1,16 @@
-From 81db7a3a3866ecd978dd4bc9873d793dc9f92629 Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Fri, 18 Nov 2022 14:30:02 +0100
+From a9f89e8e2a42111b2eb786c58c1acb57e8b87008 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Tue, 28 Jan 2025 09:12:32 +0000
 Subject: [PATCH] Board files for Mercury MP1 added
 
 ---
  arch/riscv/Kconfig                            |   4 +
- board/enclustra/mercury_mp1/Kconfig           |  53 ++++++++
+ board/enclustra/mercury_mp1/Kconfig           |  40 ++++++
  board/enclustra/mercury_mp1/MAINTAINERS       |   6 +
  board/enclustra/mercury_mp1/Makefile          |   7 +
  .../mercury_mp1/enclustra_mercury_mp1.c       | 123 ++++++++++++++++++
- include/configs/enclustra_mercury_mp1.h       |  34 +++++
- 6 files changed, 227 insertions(+)
+ include/configs/enclustra_mercury_mp1.h       |  28 ++++
+ 6 files changed, 208 insertions(+)
  create mode 100644 board/enclustra/mercury_mp1/Kconfig
  create mode 100644 board/enclustra/mercury_mp1/MAINTAINERS
  create mode 100644 board/enclustra/mercury_mp1/Makefile
@@ -18,12 +18,12 @@ Subject: [PATCH] Board files for Mercury MP1 added
  create mode 100644 include/configs/enclustra_mercury_mp1.h
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index b239a1a3c7..cf4d64bc75 100644
+index 8892a0e870..4d836b8e8f 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -20,6 +20,9 @@ config TARGET_MICROCHIP_ICICLE
- config TARGET_MICROCHIP_SEVKIT
- 	bool "Support Microchip PolarFire-SoC SEV Kit"
+@@ -32,6 +32,9 @@ config TARGET_SUNDANCEDSP_POLARBERRY
+ config TARGET_ALDEC_TYSOM_M_MPFS250T
+ 	bool "Support Aldec TySoM M MPFS250T Board"
  
 +config TARGET_ENCLUSTRA_MERCURY_MP1
 +	bool "Support Enclustra Mercury+ MP1 Board"
@@ -31,20 +31,20 @@ index b239a1a3c7..cf4d64bc75 100644
  config TARGET_QEMU_VIRT
  	bool "Support QEMU Virt Board"
  
-@@ -69,6 +72,7 @@ source "board/aries/m100pfsevp/Kconfig"
- source "board/emulation/qemu-riscv/Kconfig"
- source "board/microchip/mpfs_icicle/Kconfig"
- source "board/microchip/mpfs_sevkit/Kconfig"
+@@ -88,6 +91,7 @@ source "board/microchip/mpfs_icicle/Kconfig"
+ source "board/microchip/mpfs_discokit/Kconfig"
+ source "board/microchip/mpfs_videokit/Kconfig"
+ source "board/sundancedsp/polarberry/Kconfig"
 +source "board/enclustra/mercury_mp1/Kconfig"
  source "board/sifive/unleashed/Kconfig"
  source "board/sifive/unmatched/Kconfig"
  source "board/openpiton/riscv64/Kconfig"
 diff --git a/board/enclustra/mercury_mp1/Kconfig b/board/enclustra/mercury_mp1/Kconfig
 new file mode 100644
-index 0000000000..058464caa1
+index 0000000000..e7853ebe1b
 --- /dev/null
 +++ b/board/enclustra/mercury_mp1/Kconfig
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,40 @@
 +if TARGET_ENCLUSTRA_MERCURY_MP1
 +
 +config SYS_BOARD
@@ -54,24 +54,21 @@ index 0000000000..058464caa1
 +	default "enclustra"
 +
 +config SYS_CPU
-+	default "generic"
++	default "mpfs"
 +
 +config SYS_CONFIG_NAME
 +	default "enclustra_mercury_mp1"
 +
-+config SYS_TEXT_BASE
++config TEXT_BASE
 +	default 0x1000000000 if !RISCV_SMODE
 +	default 0x1000200000 if RISCV_SMODE
 +
 +config BOARD_SPECIFIC_OPTIONS
 +	def_bool y
-+	select GENERIC_RISCV
++	select MICROCHIP_MPFS
 +	select BOARD_EARLY_INIT_F
 +	select BOARD_LATE_INIT
 +	imply SMP
-+	imply CLK_CCF
-+	imply CLK_MPFS
-+	imply SYS_NS16550
 +	imply CMD_DHCP
 +	imply CMD_EXT2
 +	imply CMD_EXT4
@@ -84,18 +81,8 @@ index 0000000000..058464caa1
 +	imply EFI_PARTITION
 +	imply IP_DYN
 +	imply ISO_PARTITION
-+	imply MACB
-+	imply MII
 +	imply PHY_LIB
 +	imply PHY_VITESSE
-+	imply MMC
-+	imply MMC_WRITE
-+	imply MMC_SDHCI
-+	imply MMC_SDHCI_CADENCE
-+	imply MMC_SDHCI_ADMA
-+	imply CMD_I2C
-+	imply DM_I2C
-+	imply SYS_I2C_MICROCHIP
 +
 +endif
 diff --git a/board/enclustra/mercury_mp1/MAINTAINERS b/board/enclustra/mercury_mp1/MAINTAINERS
@@ -112,26 +99,26 @@ index 0000000000..5bd7ca1e78
 +F:	configs/enclustra_mercury_mp1_defconfig
 diff --git a/board/enclustra/mercury_mp1/Makefile b/board/enclustra/mercury_mp1/Makefile
 new file mode 100644
-index 0000000000..7fa3011740
+index 0000000000..f15be80692
 --- /dev/null
 +++ b/board/enclustra/mercury_mp1/Makefile
 @@ -0,0 +1,7 @@
 +# SPDX-License-Identifier: GPL-2.0+
 +#
-+# Copyright (C) 2021 Enclustra GmbH
++# Copyright (C) 2025 Enclustra GmbH
 +# info@enclustra.com
 +#
 +
 +obj-y	+= enclustra_mercury_mp1.o
 diff --git a/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c b/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c
 new file mode 100644
-index 0000000000..7ddba65a82
+index 0000000000..87e9dab16d
 --- /dev/null
 +++ b/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c
 @@ -0,0 +1,123 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright (C) 2021 Enclustra GmbH
++ * Copyright (C) 2025 Enclustra GmbH
 + * <info@enclustra.com>
 + */
 +
@@ -254,13 +241,13 @@ index 0000000000..7ddba65a82
 +}
 diff --git a/include/configs/enclustra_mercury_mp1.h b/include/configs/enclustra_mercury_mp1.h
 new file mode 100644
-index 0000000000..30422450ff
+index 0000000000..17d35df125
 --- /dev/null
 +++ b/include/configs/enclustra_mercury_mp1.h
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,28 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
-+ * Copyright (C) 2021 Enclustra GmbH
++ * Copyright (C) 2025 Enclustra GmbH
 + * <info@enclustra.com>
 + */
 +
@@ -270,12 +257,6 @@ index 0000000000..30422450ff
 +#include <linux/sizes.h>
 +
 +#define CONFIG_SYS_SDRAM_BASE       0x1000000000
-+#define CONFIG_SYS_INIT_SP_ADDR     (CONFIG_SYS_SDRAM_BASE + SZ_2M)
-+
-+#define CONFIG_SYS_BOOTM_LEN        SZ_64M
-+
-+#define CONFIG_STANDALONE_LOAD_ADDR 0x1000200000
-+
 +
 +/* Environment options */
 +
@@ -292,3 +273,6 @@ index 0000000000..30422450ff
 +       BOOTENV
 +
 +#endif /* __CONFIG_H */
+-- 
+2.34.1
+

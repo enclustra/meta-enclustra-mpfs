@@ -1,6 +1,6 @@
-From c4ed31b480b8cc0723b72e4476a0d4bdfbea378e Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Fri, 21 Oct 2022 14:10:31 +0200
+From 8e21af46e8f0c073ed6ce1fb8f8363d7bf3687f4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Tue, 28 Jan 2025 09:25:35 +0000
 Subject: [PATCH] SI5338 configuration
 
 ---
@@ -14,12 +14,12 @@ Subject: [PATCH] SI5338 configuration
  create mode 100644 board/enclustra/mercury_mp1/si5338_config.h
 
 diff --git a/board/enclustra/mercury_mp1/Kconfig b/board/enclustra/mercury_mp1/Kconfig
-index 1dafb90ef9..142da45693 100644
+index e7853ebe1b..ed35c61cac 100644
 --- a/board/enclustra/mercury_mp1/Kconfig
 +++ b/board/enclustra/mercury_mp1/Kconfig
-@@ -51,4 +51,9 @@ config BOARD_SPECIFIC_OPTIONS
- 	imply DM_I2C
- 	imply SYS_I2C_MICROCHIP
+@@ -37,4 +37,9 @@ config BOARD_SPECIFIC_OPTIONS
+ 	imply PHY_LIB
+ 	imply PHY_VITESSE
  
 +config SI5338_CONFIGURATION
 +	bool "Configure SI5338"
@@ -28,7 +28,7 @@ index 1dafb90ef9..142da45693 100644
 +
  endif
 diff --git a/board/enclustra/mercury_mp1/Makefile b/board/enclustra/mercury_mp1/Makefile
-index 7fa3011740..fcf1fef18a 100644
+index f15be80692..af6d1f2700 100644
 --- a/board/enclustra/mercury_mp1/Makefile
 +++ b/board/enclustra/mercury_mp1/Makefile
 @@ -4,4 +4,5 @@
@@ -38,7 +38,7 @@ index 7fa3011740..fcf1fef18a 100644
 +obj-$(CONFIG_SI5338_CONFIGURATION)	+= si5338_config.o
  obj-y	+= enclustra_mercury_mp1.o
 diff --git a/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c b/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c
-index 7ddba65a82..5683df5f00 100644
+index 87e9dab16d..542be6c675 100644
 --- a/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c
 +++ b/board/enclustra/mercury_mp1/enclustra_mercury_mp1.c
 @@ -9,6 +9,7 @@
@@ -67,7 +67,7 @@ index 0000000000..3875d38ae6
 @@ -0,0 +1,164 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright (C) 2022 Enclustra GmbH
++ * Copyright (C) 2025 Enclustra GmbH
 + * <info@enclustra.com>
 + */
 +
@@ -237,7 +237,7 @@ index 0000000000..957dcd6d68
 @@ -0,0 +1,12 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright (C) 2022 Enclustra GmbH
++ * Copyright (C) 2025 Enclustra GmbH
 + * <info@enclustra.com>
 + */
 +
@@ -248,3 +248,6 @@ index 0000000000..957dcd6d68
 +
 +#endif
 \ No newline at end of file
+-- 
+2.34.1
+

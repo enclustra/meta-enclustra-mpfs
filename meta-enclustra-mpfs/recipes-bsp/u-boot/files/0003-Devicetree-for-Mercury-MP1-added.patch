@@ -1,6 +1,6 @@
-From 13c15f933a0bd48f7f89166bced83944e47cf501 Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Tue, 18 Oct 2022 10:10:05 +0200
+From 59a09f9ab55db834f76c2f93dcca86dbc5ece435 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Mon, 27 Jan 2025 19:04:36 +0000
 Subject: [PATCH] Devicetree for Mercury MP1 added
 
 ---
@@ -8,14 +8,17 @@ Subject: [PATCH] Devicetree for Mercury MP1 added
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/riscv/dts/Makefile b/arch/riscv/dts/Makefile
-index 883d8cc11c..786fda2ee3 100644
+index 287034676a..fa42674645 100644
 --- a/arch/riscv/dts/Makefile
 +++ b/arch/riscv/dts/Makefile
-@@ -5,6 +5,7 @@ dtb-$(CONFIG_TARGET_ARIES_M100PFSEVP) += m100pfsevp.dtb
- dtb-$(CONFIG_TARGET_MICROCHIP_ICICLE) += microchip-mpfs-icicle-kit.dtb \
- microchip-mpfs-icicle-kit-amp.dtb microchip-mpfs-icicle-kit-qspi-nor.dtb
- dtb-$(CONFIG_TARGET_MICROCHIP_SEVKIT) += microchip-mpfs-sev-kit.dtb
+@@ -9,6 +9,7 @@ microchip-mpfs-icicle-kit-amp.dtb microchip-mpfs-icicle-kit-qspi-nor.dtb
+ dtb-$(CONFIG_TARGET_MICROCHIP_DISCOKIT) += microchip-mpfs-disco-kit.dtb
+ dtb-$(CONFIG_TARGET_MICROCHIP_VIDEOKIT) += microchip-mpfs-video-kit.dtb
+ dtb-$(CONFIG_TARGET_SUNDANCEDSP_POLARBERRY) += mpfs-polarberry.dtb
 +dtb-$(CONFIG_TARGET_ENCLUSTRA_MERCURY_MP1) += enclustra_mercury_mp1.dtb
- dtb-$(CONFIG_TARGET_QEMU_VIRT) += qemu-virt.dtb
+ dtb-$(CONFIG_TARGET_QEMU_VIRT) += qemu-virt32.dtb qemu-virt64.dtb
  dtb-$(CONFIG_TARGET_OPENPITON_RISCV64) += openpiton-riscv64.dtb
  dtb-$(CONFIG_TARGET_SIFIVE_UNLEASHED) += hifive-unleashed-a00.dtb
+-- 
+2.34.1
+

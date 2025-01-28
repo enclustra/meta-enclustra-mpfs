@@ -1,6 +1,6 @@
-From cb2a87f5166aeccd9a62ebbf957718ed3407b16a Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Tue, 18 Oct 2022 09:56:56 +0200
+From 889ff01dc7f5a6a63c0a6c80d9e13155eb361862 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Mon, 27 Jan 2025 18:57:28 +0000
 Subject: [PATCH] Enclustra MAC address readout from EEPROM
 
 ---
@@ -13,10 +13,10 @@ Subject: [PATCH] Enclustra MAC address readout from EEPROM
  create mode 100644 include/enclustra/eeprom-mac.h
 
 diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 3bae072005..e18a567a03 100644
+index 398473b2c5..5ebd9c3983 100644
 --- a/drivers/misc/Kconfig
 +++ b/drivers/misc/Kconfig
-@@ -46,6 +46,14 @@ config ATSHA204A
+@@ -75,6 +75,14 @@ config ATSHA204A
  	   CryptoAuthentication module found for example on the Turris Omnia
  	   board.
  
@@ -28,14 +28,14 @@ index 3bae072005..e18a567a03 100644
 +	  Reads the MAC address out of the EEPROM and configures the MAC
 +	  Addresses in the environment.
 +
- config ROCKCHIP_EFUSE
-         bool "Rockchip e-fuse support"
+ config GATEWORKS_SC
+ 	bool "Gateworks System Controller Support"
  	depends on MISC
 diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index f9826d2462..9ad449679b 100644
+index 0d291551c0..d203ce80f8 100644
 --- a/drivers/misc/Makefile
 +++ b/drivers/misc/Makefile
-@@ -32,6 +32,7 @@ obj-$(CONFIG_ALTERA_SYSID) += altera_sysid.o
+@@ -33,6 +33,7 @@ obj-$(CONFIG_ALTERA_SYSID) += altera_sysid.o
  obj-$(CONFIG_ATSHA204A) += atsha204a-i2c.o
  obj-$(CONFIG_CBMEM_CONSOLE) += cbmem_console.o
  obj-$(CONFIG_DS4510)  += ds4510.o
@@ -117,7 +117,7 @@ index 0000000000..3ec69ca3a3
 @@ -0,0 +1,11 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
-+ * (C) Copyright 2021 Enclustra GmbH
++ * (C) Copyright 2025 Enclustra GmbH
 + * <info@enclustra.com>
 + */
 +
@@ -126,3 +126,6 @@ index 0000000000..3ec69ca3a3
 +};
 +
 +int atsha204_get_mac(u8 *buffer);
+-- 
+2.34.1
+
