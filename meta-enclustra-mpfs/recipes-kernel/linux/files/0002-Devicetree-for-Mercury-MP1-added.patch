@@ -1,6 +1,6 @@
-From 11094a7afc38e653e92e846454d72d6281b8e5b4 Mon Sep 17 00:00:00 2001
-From: Andreas Buerkler <andreas.buerkler@enclustra.com>
-Date: Mon, 17 Oct 2022 19:43:47 +0200
+From 49da46ba6482334e472d9a19f0a2f0b158897f5b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20B=C3=BCrkler?= <andreas.buerkler@enclustra.com>
+Date: Tue, 28 Jan 2025 09:55:31 +0000
 Subject: [PATCH] Devicetree for Mercury MP1 added
 
 ---
@@ -8,15 +8,15 @@ Subject: [PATCH] Devicetree for Mercury MP1 added
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-index 33037a9b1258..52592e7d0f51 100644
+index 39ed87cf83e8..f9af44242709 100644
 --- a/arch/riscv/boot/dts/microchip/Makefile
 +++ b/arch/riscv/boot/dts/microchip/Makefile
-@@ -6,4 +6,5 @@ dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-m100pfsevp-sdcard.dtb
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-sev-kit.dtb
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-tysom-m.dtb
-+dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += enclustra_mercury_mp1.dtb
+@@ -8,4 +8,5 @@ dtb-$(CONFIG_ARCH_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
+ dtb-$(CONFIG_ARCH_MICROCHIP_POLARFIRE) += mpfs-video-kit.dtb
+ dtb-$(CONFIG_ARCH_MICROCHIP_POLARFIRE) += mpfs-tysom-m.dtb
+ dtb-$(CONFIG_ARCH_MICROCHIP_POLARFIRE) += pic64gx-curiosity-kit.dtb
++dtb-$(CONFIG_ARCH_MICROCHIP_POLARFIRE) += enclustra_mercury_mp1.dtb
  obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
 -- 
-2.25.1
+2.34.1
 
