@@ -27,10 +27,6 @@ ENCLUSTRA_UBOOT_COMMON_FILE_LIST = " \
     file://Si5338-RevB-Registers.h \
     "
 
-# Remove unwanted files added by meta-polarfire-soc-yocto-bsp
-SRC_URI:remove:me-mp1-250-si-d3en := " file://${UBOOT_ENV}.txt"
-SRC_URI:remove:me-mp1-250-si-d3en-e1 := " file://${UBOOT_ENV}.txt"
-
 SRC_URI:append:me-mp1-250-si-d3en := " ${ENCLUSTRA_UBOOT_COMMON_FILE_LIST}"
 SRC_URI:append:me-mp1-250-si-d3en-e1 := " ${ENCLUSTRA_UBOOT_COMMON_FILE_LIST}"
 
