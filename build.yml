@@ -34,7 +34,7 @@ repos:
 
     meta-enclustra-mpfs:
         layers:
-            meta-enclustra-mpfs:
+            meta-enclustra-module:
             meta-enclustra-refdes:
 
     meta-openembedded:
