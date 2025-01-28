@@ -1,19 +1,20 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) 2022 Enclustra GmbH
+ * Copyright (C) 2025 Enclustra GmbH
  * <info@enclustra.com>
  */
 
 #include "mpfs.dtsi"
 
 /* Clock frequency (in Hz) of the rtcclk */
-#define MTIMER_FREQ		1000000
+#define RTCCLK_FREQ		1000000
 
 / {
 	compatible = "microchip,mpfs";
 
 	aliases {
 		serial1 = &mmuart1;
+		ethernet0 = &mac1;
 		spi0 = &qspi;
 	};
 
@@ -22,10 +23,10 @@
 	};
 
 	cpus {
-		timebase-frequency = <MTIMER_FREQ>;
+		timebase-frequency = <RTCCLK_FREQ>;
 	};
 
-	/* Not that label is called uart1 in U-Boot devicetree
+	/* Note that label is called uart1 in U-Boot devicetree
 	   but mmuart1 in kernel devicetree */
 	soc {
 		mmuart1: serial@20100000 {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /*
- * Copyright (C) 2022 Enclustra GmbH
+ * Copyright (C) 2025 Enclustra GmbH
  * <info@enclustra.com>
  */
 
@@ -11,8 +11,4 @@
 		cpu3 = &cpu3;
 		cpu4 = &cpu4;
 	};
-};
-
-&refclk {
-	clock-frequency = <600000000>;
 };

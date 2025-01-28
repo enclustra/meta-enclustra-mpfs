@@ -1,1 +1,1 @@
-../../../../recipes-kernel/linux/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dts
+../../../device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dts
