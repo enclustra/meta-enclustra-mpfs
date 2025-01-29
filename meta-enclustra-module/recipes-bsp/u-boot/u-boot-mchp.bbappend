@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/patches:${THISDIR}/devicetree:"
 
 ENCLUSTRA_UBOOT_PATCH_LIST = " \
     file://0001-Enclustra-MAC-address-readout-from-EEPROM.patch \

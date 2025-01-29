@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/patches:"
 
 unset do_assemble_fitimage[depends]
 
