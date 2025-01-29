@@ -112,7 +112,7 @@ index d3c515828f..ef8aec75ba 100644
 -			debug("failed on receiving response, ending\n");
 -			return res;
 -		}
-+	res = atsha204a_recv(dev, NULL, 0);
++	res = atsha204a_send(dev, NULL, 0);
 +	if (res) {
 +		debug("device does not respond, ending\n");
 +		return res;
