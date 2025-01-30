@@ -265,7 +265,7 @@ index 0000000000..17d35df125
 +
 +#include <config_distro_bootcmd.h>
 +
-+#define CONFIG_EXTRA_ENV_SETTINGS \
++#define CFG_EXTRA_ENV_SETTINGS \
 +       "kernel_addr_r=0x1004000000\0" \
 +       "fdt_addr_r=0x1008000000\0" \
 +       "scriptaddr=0x1008100000\0" \
