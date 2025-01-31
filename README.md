@@ -6,7 +6,7 @@ Enclustra GmbH  [support@enclustra.com]
 
 ## License
 
-See [License](meta-enclustra-mpfs/COPYING.MIT)
+See [License](meta-enclustra-module/COPYING.MIT)
 
 ## Changelog
 
@@ -14,6 +14,7 @@ See [License](meta-enclustra-mpfs/COPYING.MIT)
 |------------|---------|---------------------------------------------------------------------------------|
 | 07.10.2022 | 2021.11 | First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
 | 24.10.2022 | 2022.09 | Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
+| 31.01.2025 | 2024.09 | Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
 
 ## Description
 
@@ -21,9 +22,9 @@ This repository contains a Yocto layer to generate Linux reference designs for t
 The Yocto layer can be included into an own project or the provided [build.yml](build.yml) can be used to build a design using [kas](https://kas.readthedocs.io/en/latest/#) tool.
 The reference design is based on [meta-polarfire-soc-yocto-bsp](https://github.com/polarfire-soc/meta-polarfire-soc-yocto-bsp) release 2022.09 that uses following versions.
 
-- Yocto: honister
-- U-Boot: 2022.01
-- Linux:  kernel 5.15.68
+- Yocto: kirkstone
+- U-Boot: 2023.07
+- Linux:  kernel 6.6.51
 
 ## FPGA Reference Designs for Microchip Libero
 
@@ -45,7 +46,7 @@ The HSS software with support for Mercury+ MP1 can be found in following reposit
 
 This reference design was tested on following operating systems:
 
-- Ubuntu 20.04
+- Ubuntu 22.04
 
 ### Required Packages
 
@@ -60,18 +61,14 @@ See [Yocto System Requirements](https://docs.yoctoproject.org/3.4.2/ref-manual/s
 
 ### Supported Machine Targets
 
-The product model can be specified as target device (variable: **MACHINE**). Following product models are supported:
+The product model and base board can be specified as target device (variable: **MACHINE**). Following targets are supported:
 
-- me-mp1-250-si-d3en
-- me-mp1-250-si-d3en-e1
-
-### Supported Enclustra Base Boards
-
-The Enclustra base board can be specified with **ENCLUSTRA_BASEBOARD** variable. Following base boards are supported:
-
-- pe1 ([Mercury+ PE1](https://www.enclustra.com/en/products/base-boards/mercury-pe1-200-300-400))
-- pe3 ([Mercury+ PE3](https://www.enclustra.com/en/products/base-boards/mercury-pe3))
-- st1 ([Mercury+ ST1](https://www.enclustra.com/en/products/base-boards/mercury-st1))
+- refdes-me-mp1-250-si-d3en-e1-pe1.conf
+- refdes-me-mp1-250-si-d3en-e1-pe3.conf
+- refdes-me-mp1-250-si-d3en-e1-st1.conf
+- refdes-me-mp1-250-si-d3en-pe1.conf
+- refdes-me-mp1-250-si-d3en-pe3.conf
+- refdes-me-mp1-250-si-d3en-st1.conf
 
 ### Accelerate Build
 
@@ -95,16 +92,15 @@ The recommended build flow is to use kas, which is a Python based tool that prov
 
 Use following command to build the target specified in the build.yml file (default = me-mp1-250-si-d3en). A base board can be specified optionally. If ENCLUSTRA_BASEBOARD variable is set, base board dependent devicetree settings are added to the kernel devicetree.
 
-    export ENCLUSTRA_BASEBOARD=pe3
     kas build build.yml
 
 #### Usage \#2
 
 Use following command to specify the bitbake command to be executed. **MACHINE** and **ENCLUSTRA_BASEBOARD** variable can be overridden according to sections [Supported Machine Targets](#supported-machine-targets) and [Supported Enclustra Base Boards](#supported-enclustra-base-boards).
 
-    kas shell build.yml -c 'MACHINE=me-mp1-250-si-d3en ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest'
+    kas shell build.yml -c 'MACHINE=me-mp1-250-si-d3en bitbake image-minimal-hwtest'
 
-Note that the image [image-minimal-hwtest](meta-enclustra-mpfs/recipes-core/images/image-minimal-hwtest.bb) can be replaced by any available image recipe. Following are a few examples provided by openembedded-core layer:
+Note that the image [image-minimal-hwtest](meta-enclustra-refdes/recipes-core/images/image-minimal-hwtest.bb) can be replaced by any available image recipe. Following are a few examples provided by openembedded-core layer:
 - core-image-base
 - core-image-minimal
 - core-image-minimal-dev
@@ -115,13 +111,12 @@ Note that the image [image-minimal-hwtest](meta-enclustra-mpfs/recipes-core/imag
 The tool kas can be used to checkout the repositories and setup the build directory. The build process can be started independently with bitbake as shown in following example.
 
     kas checkout kas-project.yml
-    source openembedded-core/oe-init-build-env 
-    export BB_ENV_EXTRAWHITE="ENCLUSTRA_BASEBOARD"
-    MACHINE=me-mp1-250-si-d3en ENCLUSTRA_BASEBOARD=pe3 bitbake image-minimal-hwtest
+    source openembedded-core/oe-init-build-env
+    MACHINE=me-mp1-250-si-d3en bitbake image-minimal-hwtest
 
 ## Deployment
 
-The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks](meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-me-mp1-250-si-d3en.wic**.
+The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-me-mp1-250-si-d3en.wic**.
 
 To be able to boot Linux, the SoC must be programmed with the [bitstream](#fpga-reference-designs-for-microchip-libero) and [HSS](#hart-software-services).
 
@@ -149,18 +144,25 @@ Login with **root** as user name, no password is set.
 ## Devicetree
 
 Linux and U-Boot use the same devicetree source files to prevent from maintaining two separate devicetree sources.
-This is achieved by linking the kernel devicetree sources to U-Boot in the meta-enclustra-mpfs layer.
+This is achieved by linking the kernel devicetree sources to U-Boot in the meta-enclustra-mpfs layers.
 
-Following list show all devicetree include files added by meta-enclustra-mpfs:
+Following list show all devicetree include files added by meta-enclustra-mpfs layers:
 
-| File name                                                                                                                                | Description |
-|------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [enclustra_mercury_mp1_common.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_mp1_common.dtsi)                    | Common definitions that are valid for all Mercury+ MP1 product models |
-| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-si-d3en/enclustra_mercury_mp1_fabric.dtsi) | Devicetree nodes in FPGA fabric |
-| [enclustra_mercury_mp1.dts](meta-enclustra-mpfs/recipes-kernel/linux/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dts)                 | Top level devicetree. Contains nodes and properties that are specific to that product model as DDR4 memory size |
-| [enclustra_mercury_pe1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe1.dtsi)                                  | Mercury+ PE1 base board specific devicetree properties |
-| [enclustra_mercury_pe3.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe3.dtsi)                                  | Mercury+ PE3 base board specific devicetree properties |
-| [enclustra_mercury_st1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_st1.dtsi)                                  | Mercury+ ST1 base board specific devicetree properties |
+| File name                                                                                                                                        | Description |
+|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi)                       | Common definitions that are valid for all Mercury+ MP1 product models |
+| [enclustra_mercury_mp1_common_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common_fabric.dtsi)         | Common definitions for FPGA fabric nodes that are valid for all Mercury+ MP1 product models |
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1_fabric.dtsi)    | Devicetree nodes in FPGA fabric |
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1_fabric.dtsi) | Devicetree nodes in FPGA fabric |
+| [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dtsi)                  | Contains nodes and properties that are specific to the me-mp1-250-si-d3en product model as DDR4 memory size |
+  [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1.dtsi)               | Contains nodes and properties that are specific to the me-mp1-250-si-d3en-e1 product model as DDR4 memory size |
+  [enclustra_mercury_mp1.dts](meta-enclustra-module/recipes-bsp-device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree placeholder |
+  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp-device-tree/files/me-pe1-generic/enclustra_mercury_mp1.dts)                        | Top level devicetree for reference design on PE1 base board |
+  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp-device-tree/files/me-pe3-generic/enclustra_mercury_mp1.dts)                        | Top level devicetree for reference design on PE3 base board |
+  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp-device-tree/files/me-st1-generic/enclustra_mercury_mp1.dts)                        | Top level devicetree for reference design on ST1 base board |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_baseboard.dtsi)                         | Mercury+ PE1 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_baseboard.dtsi)                         | Mercury+ PE3 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_baseboard.dtsi)                         | Mercury+ ST1 base board specific devicetree properties |
 
 ### Modification for eMMC boot
 
@@ -168,7 +170,7 @@ On the Mercury+ MP1 product series, the MSS MMC controller is connected through 
 
 The default devicetree works for both SD card and eMMC memory, but the eMMC performance is limited. The devicetree needs to be modified for full eMMC support (use of 8 data lanes instead of only 4) with the disadvantage that SD card is not supported anymore.
 
-In file [meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_mp1_common.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_mp1_common.dtsi) in 'mmc' node, following settings needs to be removed or commented out:
+In file [meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi) in 'mmc' node, following settings needs to be removed or commented out:
 
 	/* SD card */
 	bus-width = <4>;
@@ -188,11 +190,11 @@ And following settings need to be added or the existing comments removed:
 
 If the **ENCLUSTRA_BASEBOARD** variable is set to an Enclustra Base Board, a devicetree include file is added for the Linux kernel which contains base-board specific configuration settings:
  
-| Base board   | Value of variable<br>ENCLUSTRA_BASEBOARD | Included devicetree file                                                                                | Added peripherals |
-|--------------|------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------|
-| Mercury+ PE1 | pe1                                      | [enclustra_mercury_pe1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe1.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor | 
-| Mercury+ PE3 | pe3                                      | [enclustra_mercury_pe3.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_pe3.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor<br>- PCAl6416 I2C IO expander |
-| Mercury+ ST1 | st1                                      | [enclustra_mercury_st1.dtsi](meta-enclustra-mpfs/recipes-kernel/linux/files/enclustra_mercury_st1.dtsi) |  |
+| Base board   | Included devicetree file                                                                                                          | Added peripherals |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| Mercury+ PE1 | [enclustra_mercury_pe1.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/enclustra_mercury_baseboard.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor |
+| Mercury+ PE3 | [enclustra_mercury_pe3.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/enclustra_mercury_baseboard.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor<br>- PCAl6416 I2C IO expander |
+| Mercury+ ST1 | [enclustra_mercury_st1.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_baseboard.dtsi) |  |
 
 ## Patches
 
@@ -200,16 +202,16 @@ If the **ENCLUSTRA_BASEBOARD** variable is set to an Enclustra Base Board, a dev
 
 Following U-Boot patches are added.
 
-| Patch Name                                                                                                                                                                      | Description |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [0001-Enclustra-MAC-address-readout-from-EEPROM.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0001-Enclustra-MAC-address-readout-from-EEPROM.patch)                       | Add a feature to read and configure the MAC address from atsha204a EEPROM |
-| [0002-Board-files-for-Mercury-MP1-added.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0002-Board-files-for-Mercury-MP1-added.patch)                                       | Add support for Mercury+ MP1 product series |
-| [0003-Devicetree-for-Mercury-MP1-added.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0003-Devicetree-for-Mercury-MP1-added.patch)                                         | Add MP1 devicetree to Makefile |
-| [0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch) | Remove check in Microchip I2C driver to allow wakeup of atsha204a by transmitting only 1 byte |
-| [0005-Bugfix-for-atsha204a-driver.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0005-Bugfix-for-atsha204a-driver.patch)                                                   | Fix wakeup sequence in atsha204a driver |
-| [0006-Use-only-high-memory-region.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0006-Use-only-high-memory-region.patch)                                                   | Modifications to allow booting from address > 4Gbyte |
-| [0007-Rename-mpfs-devicetree.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0007-Rename-mpfs-devicetree.patch)                                                             | Rename microchip-mpfs.dtsi to mpfs.dtsi to be able to reuse the devicetree from Linux kernel |
-| [0008-SI5338-configuration.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0008-SI5338-configuration.patch)                                                                 | Add configuration of SI5338 clock generator in U-Boot |
+| Patch Name                                                                                                                                                                          | Description |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [0001-Enclustra-MAC-address-readout-from-EEPROM.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0001-Enclustra-MAC-address-readout-from-EEPROM.patch)                       | Add a feature to read and configure the MAC address from atsha204a EEPROM |
+| [0002-Board-files-for-Mercury-MP1-added.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0002-Board-files-for-Mercury-MP1-added.patch)                                       | Add support for Mercury+ MP1 product series |
+| [0003-Devicetree-for-Mercury-MP1-added.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0003-Devicetree-for-Mercury-MP1-added.patch)                                         | Add MP1 devicetree to Makefile |
+| [0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch) | Remove check in Microchip I2C driver to allow wakeup of atsha204a by transmitting only 1 byte |
+| [0005-Bugfix-for-atsha204a-driver.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0005-Bugfix-for-atsha204a-driver.patch)                                                   | Fix wakeup sequence in atsha204a driver |
+| [0006-Use-only-high-memory-region.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0006-Use-only-high-memory-region.patch)                                                   | Modifications to allow booting from address > 4Gbyte |
+| [0007-Rename-mpfs-devicetree.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0007-Rename-mpfs-devicetree.patch)                                                             | Rename microchip-mpfs.dtsi to mpfs.dtsi to be able to reuse the devicetree from Linux kernel |
+| [0008-SI5338-configuration.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0008-SI5338-configuration.patch)                                                                 | Add configuration of SI5338 clock generator in U-Boot |
 
 ### Linux Kernel
 
@@ -217,8 +219,7 @@ Following Linux kernel patches are added.
 
 | Patch Name                                                                                                                                                                        | Description |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-mpfs/recipes-kernel/linux/files/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
-| [0002-Devicetree-for-Mercury-MP1-added.patch](meta-enclustra-mpfs/recipes-kernel/linux/files/0002-Devicetree-for-Mercury-MP1-added.patch)                                         | Add MP1 devicetree to Makefile |
+| [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-module/recipes-kernel/linux/files/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
 
 ## Additional Information
 
@@ -263,21 +264,27 @@ The 512 bits of the OTP region are reported as follows:
 
 ### Rootfs Partition Size
 
-The size of the rootfs partition is set to 132 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks](meta-enclustra-mpfs/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
+The size of the rootfs partition is set to 132 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
 
 ```
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 131072K
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 132M
 ```
 
 ### Configure SI5338 clock generator on Mercury+ PE1 and Mercury+ ST1 base board
 
-The U-Boot patch [0008-SI5338-configuration.patch](meta-enclustra-mpfs/recipes-bsp/u-boot/files/0008-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
+The U-Boot patch [0008-SI5338-configuration.patch](meta-enclustra-module/recipes-bsp/u-boot/files/0008-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
 
 1. Create a configuration with Skyworks [ClockBuilder Pro software](https://www.skyworksinc.com/Application-Pages/Clockbuilder-Pro-Software) and export the C code header file.
-2. Copy the exported header file to **meta-enclustra-mpfs/recipe_bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-mpfs/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
-3. Make following changes to file [meta-enclustra-mpfs/recipes-bsp/u-boot/files/enclustra_mercury_mp1_defconfig](meta-enclustra-mpfs/recipes-bsp/u-boot/files/enclustra_mercury_mp1_defconfig):
+2. Copy the exported header file to **meta-enclustra-refdes/recipe_bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-refdes/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
+3. Make following changes to file [meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg](meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg):
 
        CONFIG_SI5338_CONFIGURATION=y
+
+### Updating FPGA from Linux
+
+TODO:
+
+https://github.com/polarfire-soc/polarfire-soc-documentation/blob/master/how-to/re-programming-the-fpga-from-linux.md#v202406-and-later-releases
 
 ## Known Issues:
 
@@ -285,7 +292,3 @@ The U-Boot patch [0008-SI5338-configuration.patch](meta-enclustra-mpfs/recipes-b
 
 The clock frequency of the I2C bus is derived from the MSS AHB/APB bus clock. This clock is set to 150MHz by default. Because the biggest possible divider value is 960, the slowest possible I2C frequency is 150MHz/960=156.25kHz. With this
 156.25kHz I2C clock frequency, the wake-up pulse duration of the Atmel ATSHA204a device is violated (52us instead of 60us). Measurements has shown that the device wakes up reliable when the wake-up pulse is bigger than 30us.
-
-#### Software Reboot in U-Boot
-
-Rebooting the hardware in U-Boot by **reset** command is not supported.
