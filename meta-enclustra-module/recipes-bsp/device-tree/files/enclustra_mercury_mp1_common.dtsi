@@ -31,6 +31,11 @@
 		mmuart1: serial@20100000 {
 			status = "okay";
 		};
+
+		/* Systemcontroller SPI flash node is not defined in U-Boot devicetree */
+		syscontroller_qspi: spi@37020100 {
+			status = "disabled";
+		};
 	};
 };
 
@@ -144,6 +149,22 @@
 
 &syscontroller {
 	status = "okay";
+	microchip,bitstream-flash = <&sys_ctrl_flash>;
+};
+
+&syscontroller_qspi {
+	status = "okay";
+
+	sys_ctrl_flash: flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <1>;
+		spi-max-frequency = <20000000>;
+	};
 };
 
 &mbox {
