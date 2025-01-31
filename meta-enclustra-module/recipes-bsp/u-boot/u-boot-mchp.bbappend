@@ -8,7 +8,6 @@ ENCLUSTRA_UBOOT_PATCH_LIST = " \
     file://0005-Bugfix-for-atsha204a-driver.patch \
     file://0006-Use-only-high-memory-region.patch \
     file://0007-Rename-mpfs-devicetree.patch \
-    file://0008-SI5338-configuration.patch \
     "
 
 ENCLUSTRA_UBOOT_DTS_LIST = " \
@@ -25,7 +24,6 @@ SRC_URI:append:me-mp1-generic := " \
     file://${UBOOT_ENV_SRC} \
     ${ENCLUSTRA_UBOOT_PATCH_LIST} \
     ${ENCLUSTRA_UBOOT_DTS_LIST} \
-    file://Si5338-RevB-Registers.h \
     "
 
 COMPATIBLE_MACHINE:append = " |me-mp1-generic|"
@@ -49,14 +47,5 @@ do_add_enclustra_config:append:me-mp1-generic() {
     cp ${WORKDIR}/enclustra_mercury_mp1_defconfig ${S}/configs/
 }
 
-
-do_add_clockgen_config() {
-    if test -f "${WORKDIR}/Si5338-RevB-Registers.h"; then
-        mkdir -p ${S}/board/enclustra/mercury_mp1
-        cp ${WORKDIR}/Si5338-RevB-Registers.h ${S}/board/enclustra/mercury_mp1/
-    fi
-}
-
 addtask do_add_enclustra_devicetree after do_patch before do_configure
 addtask do_add_enclustra_config after do_patch before do_configure
-addtask do_add_clockgen_config after do_unpack before do_patch
