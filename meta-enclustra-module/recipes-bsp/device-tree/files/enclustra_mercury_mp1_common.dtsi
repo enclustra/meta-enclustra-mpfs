@@ -13,22 +13,21 @@
 	compatible = "microchip,mpfs";
 
 	aliases {
-		serial1 = &mmuart1;
-		ethernet0 = &mac1;
+		serial0 = &mmuart1;
 		spi0 = &qspi;
 	};
 
 	chosen {
-		stdout-path = "serial1:115200n8";
+		stdout-path = "serial0:115200n8";
 	};
 
 	cpus {
 		timebase-frequency = <RTCCLK_FREQ>;
 	};
 
-	/* Note that label is called uart1 in U-Boot devicetree
-	   but mmuart1 in kernel devicetree */
 	soc {
+		/* Note that label is called uart1 in U-Boot devicetree
+		   but mmuart1 in kernel devicetree */
 		mmuart1: serial@20100000 {
 			status = "okay";
 		};
