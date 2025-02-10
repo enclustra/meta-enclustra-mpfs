@@ -64,8 +64,8 @@
 		spi-rx-bus-width = <4>;
 		spi-max-frequency = <20000000>;
 
-		partition@full {
-			label = "full";
+		partition@,mss-flash {
+			label = "mss-flash";
 			reg = <0x0 0x4000000>;
 		};
 	};
@@ -158,12 +158,17 @@
 	sys_ctrl_flash: flash@0 {
 		#address-cells = <1>;
 		#size-cells = <1>;
-		compatible = "jedec,spi-nor";
+		compatible = "spansion,s25fl512s", "jedec,spi-nor";
 		reg = <0>;
 
 		spi-tx-bus-width = <1>;
 		spi-rx-bus-width = <1>;
 		spi-max-frequency = <20000000>;
+
+		partition@,fpga-flash {
+			label = "fpga-flash";
+			reg = <0x0 0x4000000>;
+		};
 	};
 };
 
