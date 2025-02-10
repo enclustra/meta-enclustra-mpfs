@@ -135,12 +135,17 @@
 	status = "okay";
 	ngpios = <14>;
 	interrupts = <13 14 15 16 17 18 19 20 21 22 23 24 25 26>;
+	gpio-line-names = "", "", "", "", "", "", "", "", "", "",
+	                  "", "", "MSS_RST_N", "I2C_INT_N";
 };
 
 &gpio1 {
 	status = "okay";
 	ngpios = <24>;
 	interrupts = <27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50>;
+	gpio-line-names = "", "", "", "", "", "", "", "", "", "",
+	                  "", "", "", "", "", "", "", "", "", "",
+	                  "", "", "MSS_LED0_N", "MSS_LED1_N";
 };
 
 &refclk {
