@@ -93,7 +93,7 @@
 /* FPGA Fabric I2C - this I2C bus is connected to the MSS I2C bus on hardware */
 &i2c0 {
 	status = "okay";
-	clock-frequency = <400000>;
+	clock-frequency = <100000>;
 };
 
 /* MSS I2C */

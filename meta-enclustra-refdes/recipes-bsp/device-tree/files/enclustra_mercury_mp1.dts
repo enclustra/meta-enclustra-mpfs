@@ -8,3 +8,4 @@
 
 #include "enclustra_mercury_mp1.dtsi"
 #include "enclustra_mercury_baseboard.dtsi"
+#include "enclustra_mercury_mp1_fabric.dtsi"

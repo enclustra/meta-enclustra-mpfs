@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (C) 2025 Enclustra GmbH
+ * <info@enclustra.com>
+ */
+
+#include "enclustra_mercury_mp1_common_fabric.dtsi"
+
+/ {
+
+	fabric_clk_50: fabric_clk_50 {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <50000000>;
+	};
+
+};
+
+&fic3_512m {
+
+	sdio_sel: sdio_sel@0 {
+		compatible = "generic-uio";
+		linux,uio-name = "fic3-sdio-sel";
+		reg = <0x0 0x10>;
+	};
+
+	uart_sel: uart_sel@1000000 {
+		compatible = "microchip,coregpio-rtl-v3";
+		reg = <0x1000000 0x1000>;
+		clocks = <&fabric_clk_50>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <1>;
+		gpio-line-names = "UART_SEL";
+	};
+
+	i2c_fpga: i2c@2000000 {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		compatible = "microchip,corei2c-rtl-v7";
+		reg = <0x2000000 0x100>;
+		clocks = <&fabric_clk_50>;
+		interrupt-parent = <&plic>;
+		interrupts = <123>;
+		clock-frequency = <100000>;
+	};
+
+	gpio_led: gpio_led@3000000 {
+		compatible = "microchip,coregpio-rtl-v3";
+		reg = <0x3000000 0x1000>;
+		clocks = <&fabric_clk_50>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <4>;
+		gpio-line-names = "FPGA_LED0_N", "FPGA_LED1_N", "FPGA_LED2_N", "FPGA_LED3_N";
+	};
+
+};

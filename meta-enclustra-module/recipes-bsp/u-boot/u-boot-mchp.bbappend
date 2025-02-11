@@ -20,7 +20,6 @@ ENCLUSTRA_UBOOT_DTS_LIST = " \
     file://enclustra_mercury_mp1.dts \
     file://enclustra_mercury_mp1.dtsi \
     file://enclustra_mercury_mp1-u-boot.dtsi \
-    file://enclustra_mercury_mp1_fabric.dtsi \
     "
 
 SRC_URI:append:me-mp1-generic := " \
@@ -41,7 +40,6 @@ do_add_enclustra_devicetree:append:me-mp1-generic() {
     cp ${WORKDIR}/enclustra_mercury_mp1.dts ${S}/arch/riscv/dts/
     cp ${WORKDIR}/enclustra_mercury_mp1.dtsi ${S}/arch/riscv/dts/
     cp ${WORKDIR}/enclustra_mercury_mp1-u-boot.dtsi ${S}/arch/riscv/dts/
-    cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
 }
 
 do_add_enclustra_config() {
