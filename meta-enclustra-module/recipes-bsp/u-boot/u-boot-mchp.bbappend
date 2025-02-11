@@ -1,5 +1,9 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/patches:${THISDIR}/devicetree:"
 
+UBOOT_ENV = "boot"
+UBOOT_ENV_SRC_SUFFIX = "cmd"
+UBOOT_ENV_SUFFIX = "scr"
+
 ENCLUSTRA_UBOOT_PATCH_LIST = " \
     file://0001-Enclustra-MAC-address-readout-from-EEPROM.patch \
     file://0002-Board-files-for-Mercury-MP1-added.patch \
@@ -21,7 +25,7 @@ ENCLUSTRA_UBOOT_DTS_LIST = " \
 
 SRC_URI:append:me-mp1-generic := " \
     file://enclustra_mercury_mp1_defconfig \
-    file://${UBOOT_ENV_SRC} \
+    file://boot.cmd \
     ${ENCLUSTRA_UBOOT_PATCH_LIST} \
     ${ENCLUSTRA_UBOOT_DTS_LIST} \
     "
