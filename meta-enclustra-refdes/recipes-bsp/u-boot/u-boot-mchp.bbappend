@@ -2,19 +2,16 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/patches:${THISDIR}/devic
 
 SRC_URI:append:me-pe1-generic = " \
     file://enclustra_mercury_baseboard.dtsi \
-    file://enclustra_mercury_mp1_fabric.dtsi \
     file://enclustra_mercury_mp1.dts \
     "
 
 SRC_URI:append:me-pe3-generic = " \
     file://enclustra_mercury_baseboard.dtsi \
-    file://enclustra_mercury_mp1_fabric.dtsi \
     file://enclustra_mercury_mp1.dts \
     "
 
 SRC_URI:append:me-st1-generic = " \
     file://enclustra_mercury_baseboard.dtsi \
-    file://enclustra_mercury_mp1_fabric.dtsi \
     file://enclustra_mercury_mp1.dts \
     "
 
@@ -41,17 +38,14 @@ do_add_enclustra_devicetree() {
 
 do_add_enclustra_devicetree:append:me-pe1-generic() {
     cp ${WORKDIR}/enclustra_mercury_baseboard.dtsi ${S}/arch/riscv/dts/
-    cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
 }
 
 do_add_enclustra_devicetree:append:me-pe3-generic() {
     cp ${WORKDIR}/enclustra_mercury_baseboard.dtsi ${S}/arch/riscv/dts/
-    cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
 }
 
 do_add_enclustra_devicetree:append:me-st1-generic() {
     cp ${WORKDIR}/enclustra_mercury_baseboard.dtsi ${S}/arch/riscv/dts/
-    cp ${WORKDIR}/enclustra_mercury_mp1_fabric.dtsi ${S}/arch/riscv/dts/
 }
 
 addtask do_add_clockgen_config after do_unpack before do_patch
