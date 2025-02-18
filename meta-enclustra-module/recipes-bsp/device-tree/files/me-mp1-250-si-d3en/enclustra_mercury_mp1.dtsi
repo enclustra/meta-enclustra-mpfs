@@ -14,16 +14,16 @@
 		ethernet1 = &mac1;
 	};
 
-	/* 1 Gbyte DDR4 memory in 32bit addressable memory */
+	/* 32 Mbyte DDR4 memory in 32bit addressable memory */
 	mss_memory_low: memory@80000000 {
 		device_type = "memory";
-		reg = <0x0 0x80000000 0x0 0x40000000>;
+		reg = <0x0 0x80000000 0x0 0x2000000>;
 	};
 
-	/* 1 Gbyte DDR4 memory in 64bit addressable memory */
+	/* 2016 Mbyte DDR4 memory in 64bit addressable memory */
 	mss_memory_high: memory@1000000000 {
 		device_type = "memory";
-		reg = <0x10 0x0 0x0 0x40000000>;
+		reg = <0x10 0x0 0x0 0x7e000000>;
 	};
 };
 
