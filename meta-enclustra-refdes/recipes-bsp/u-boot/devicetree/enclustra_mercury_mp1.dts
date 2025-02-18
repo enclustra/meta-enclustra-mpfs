@@ -1,1 +1,10 @@
-../../device-tree/files/enclustra_mercury_mp1.dts
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (C) 2025 Enclustra GmbH
+ * <info@enclustra.com>
+ */
+
+/dts-v1/;
+
+#include "enclustra_mercury_mp1.dtsi"
+#include "enclustra_mercury_baseboard.dtsi"
