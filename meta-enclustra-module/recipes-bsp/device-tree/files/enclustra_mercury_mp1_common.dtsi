@@ -127,6 +127,7 @@
 };
 
 &usb {
+	dma-noncoherent;
 	dr_mode = "host";
 	status = "okay";
 };
