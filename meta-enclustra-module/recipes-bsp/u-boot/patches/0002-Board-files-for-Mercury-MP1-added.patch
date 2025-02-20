@@ -60,8 +60,8 @@ index 0000000000..e7853ebe1b
 +	default "enclustra_mercury_mp1"
 +
 +config TEXT_BASE
-+	default 0x1000000000 if !RISCV_SMODE
-+	default 0x1000200000 if RISCV_SMODE
++	default 0x80000000 if !RISCV_SMODE
++	default 0x80200000 if RISCV_SMODE
 +
 +config BOARD_SPECIFIC_OPTIONS
 +	def_bool y
@@ -256,7 +256,7 @@ index 0000000000..17d35df125
 +
 +#include <linux/sizes.h>
 +
-+#define CONFIG_SYS_SDRAM_BASE       0x1000000000
++#define CONFIG_SYS_SDRAM_BASE       0x80000000
 +
 +/* Environment options */
 +
@@ -266,10 +266,10 @@ index 0000000000..17d35df125
 +#include <config_distro_bootcmd.h>
 +
 +#define CFG_EXTRA_ENV_SETTINGS \
-+       "kernel_addr_r=0x1004000000\0" \
-+       "fdt_addr_r=0x1008000000\0" \
-+       "scriptaddr=0x1008100000\0" \
-+       "fitimage_addr_r=0x1008300000\0" \
++       "kernel_addr_r=0x84000000\0" \
++       "fdt_addr_r=0x88000000\0" \
++       "scriptaddr=0x88100000\0" \
++       "fitimage_addr_r=0x88300000\0" \
 +       BOOTENV
 +
 +#endif /* __CONFIG_H */
