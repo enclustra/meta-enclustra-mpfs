@@ -4,7 +4,7 @@ stages:
 build_image:
     tags:
         - docker
-    image: ${CI_REGISTRY}/microchip-linux-enclustra:2024.2
+    image: ${CI_REGISTRY}/microchip-linux-cache:2024.2
     stage: build
     script:
         - kas shell build.yml -c "MACHINE=refdes-${MODULE}-${BASEBOARD} bitbake image-minimal-hwtest"
