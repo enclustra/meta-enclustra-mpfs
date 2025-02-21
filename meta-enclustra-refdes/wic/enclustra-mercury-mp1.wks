@@ -1,5 +1,5 @@
-part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096 --fixed-size 64M
 part /hssboot --source rawcopy --ondisk mmcblk0 --sourceparams="file=payload.bin" --fixed-size 8192K --align 1 --part-type 21686148-6449-6E6F-744E-656564454649
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 131072K
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 128M
 
 bootloader --ptable gpt

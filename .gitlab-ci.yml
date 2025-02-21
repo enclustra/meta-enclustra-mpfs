@@ -1,155 +1,22 @@
-default:
-    before_script:
-        - pip install kas
-        - export PATH=$PATH:/home/gitlab-runner/.local/bin
-        - sudo apt-get -y install zstd
-
 stages:
-    - preparation
     - build
 
-build_cache:
+build_image:
     tags:
-        - Ubuntu_20_04
-    stage: preparation
-    script:
-        - mkdir DL
-        - mkdir SSC
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas build build.yml
-    rules:
-        - when: manual
-    timeout: 4 hours
-    artifacts:
-        name: build_cache_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./DL
-            - ./SSC
-        expire_in: 1 day
-
-build_MP1-250-EES-D3E:
-    tags:
-        - Ubuntu_20_04
+        - docker
+    image: ${CI_REGISTRY}/microchip-linux-enclustra:2024.2
     stage: build
     script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-250-ees-d3e bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
+        - kas shell build.yml -c "MACHINE=refdes-${MODULE}-${BASEBOARD} bitbake image-minimal-hwtest"
+    parallel:
+        matrix:
+            - BASEBOARD: ["st1", "pe1", "pe3"]
+            - MODULE: ["me-mp1-250-si-d3en", "me-mp1-250-si-d3en-e1"]
     rules:
         - when: manual
     timeout: 1 hours
     artifacts:
-        name: build_MP1-250-EES-D3E_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
+        name: build_${MODULE}-${BASEBOARD}_${CI_JOB_ID}
         paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-250-ees-d3e/*.wic
-        expire_in: 1 day
-
-build_MP1-250-EES-D3E-E1:
-    tags:
-        - Ubuntu_20_04
-    stage: build
-    script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-250-ees-d3e-e1 bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
-    rules:
-        - when: manual
-    timeout: 1 hours
-    artifacts:
-        name: build_MP1-250-EES-D3E-E1_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-250-ees-d3e-e1/*.wic
-        expire_in: 1 day
-
-build_MP1-250-SI-D3EN:
-    tags:
-        - Ubuntu_20_04
-    stage: build
-    script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-250-si-d3en bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
-    rules:
-        - when: manual
-    timeout: 1 hours
-    artifacts:
-        name: build_MP1-250-SI-D3EN_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-250-si-d3en/*.wic
-        expire_in: 1 day
-
-build_MP1-250-SI-D3EN-E1:
-    tags:
-        - Ubuntu_20_04
-    stage: build
-    script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-250-si-d3en-e1 bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
-    rules:
-        - when: manual
-    timeout: 1 hours
-    artifacts:
-        name: build_MP1-250-SI-D3EN-E1_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-250-si-d3en-e1/*.wic
-        expire_in: 1 day
-
-build_MP1-460-1SI-D4E:
-    tags:
-        - Ubuntu_20_04
-    stage: build
-    script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-460-1si-d4e bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
-    rules:
-        - when: manual
-    timeout: 1 hours
-    artifacts:
-        name: build_MP1-460-1SI-D4E_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-460-1si-d4e/*.wic
-        expire_in: 1 day
-
-build_MP1-460-1SI-D4E-E1:
-    tags:
-        - Ubuntu_20_04
-    stage: build
-    script:
-        - export SSTATE_DIR="${PWD}/SSC"
-        - export DL_DIR="${PWD}/DL"
-        - kas shell build.yml -c "MACHINE=me-mp1-460-1si-d4e-e1 bitbake image-minimal-hwtest"
-    needs:
-        - build_cache
-    dependencies:
-        - build_cache
-    rules:
-        - when: manual
-    timeout: 1 hours
-    artifacts:
-        name: build_MP1-460-1SI-D4E-E1_sha_${CI_COMMIT_SHORT_SHA}_id_${CI_JOB_ID}
-        paths:
-            - ./build/tmp-glibc/deploy/images/me-mp1-460-1si-d4e-e1/*.wic
+            - ./build/tmp-glibc/deploy/images/refdes-${MODULE}-${BASEBOARD}/*.wic
         expire_in: 1 day
