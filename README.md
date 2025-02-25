@@ -40,6 +40,8 @@ The HSS software with support for Mercury+ MP1 can be found in following reposit
 
 - [Hart Software Services](https://github.com/enclustra/hart-software-services)
 
+Only branch 2024.09 is supported.
+
 ## Host Requirements
 
 ### Host Operating System
@@ -145,18 +147,27 @@ Login with **root** as user name, no password is set.
 Linux and U-Boot use the same devicetree source files to prevent from maintaining two separate devicetree sources.
 This is achieved by linking the kernel devicetree sources to U-Boot in the meta-enclustra-mpfs layers.
 
-Following list show all devicetree include files added by meta-enclustra-mpfs layers:
+Following list show all devicetree include files added by meta-enclustra-module layer:
 
 | File name                                                                                                                                        | Description |
 |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi)                       | Common definitions that are valid for all Mercury+ MP1 product models |
 | [enclustra_mercury_mp1_common_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common_fabric.dtsi)         | Common definitions for FPGA fabric nodes that are valid for all Mercury+ MP1 product models |
-| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1_fabric.dtsi)    | Devicetree nodes in FPGA fabric |
-| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1_fabric.dtsi) | Devicetree nodes in FPGA fabric |
 | [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dtsi)                  | Contains nodes and properties that are specific to the me-mp1-250-si-d3en product model as DDR4 memory size |
   [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1.dtsi)               | Contains nodes and properties that are specific to the me-mp1-250-si-d3en-e1 product model as DDR4 memory size |
-  [enclustra_mercury_mp1.dts](meta-enclustra-module/recipes-bsp-device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree placeholder. File is replaced by meta-enclustra-refdes |
-  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp-device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree file |
+  [enclustra_mercury_mp1.dts](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree placeholder. File is replaced by meta-enclustra-refdes |
+  [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en/enclustra_mercury_mp1-u-boot.dtsi)    | U-Boot include file for me-mp1-250-si-d3en |
+  [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1-u-boot.dtsi) | U-Boot include file for me-mp1-250-si-d3en-e1 |
+
+Following list show all devicetree include files added by meta-enclustra-refdes layer:
+
+| File name                                                                                                                                        | Description |
+|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for PE1 reference designs |
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for PE3 reference designs |
+| [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for ST1 reference designs |
+  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for Linux |
+  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/u-boot/devicetree/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for U-Boot |
 | [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-pe1-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE1 base board specific devicetree properties |
 | [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-pe3-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE3 base board specific devicetree properties |
 | [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-st1-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ ST1 base board specific devicetree properties |
@@ -183,16 +194,6 @@ And following settings need to be added or the existing comments removed:
 	cap-mmc-highspeed;
 	no-1-8-v;
 
-### Base Board Dependent Peripherals
-
-The reference design contains following base-board specific configuration settings:
- 
-| Base board   | Included devicetree file                                                                                                          | Added peripherals |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| Mercury+ PE1 | [enclustra_mercury_pe1.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/enclustra_mercury_baseboard.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor |
-| Mercury+ PE3 | [enclustra_mercury_pe3.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/enclustra_mercury_baseboard.dtsi) | - 24AA128 I2C EEPROM<br>- LM96080 voltage/current monitor<br>- PCAl6416 I2C IO expander |
-| Mercury+ ST1 | [enclustra_mercury_st1.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_baseboard.dtsi) |  |
-
 ## Patches
 
 ### U-Boot
@@ -206,9 +207,8 @@ Following U-Boot patches are added.
 | [0003-Devicetree-for-Mercury-MP1-added.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0003-Devicetree-for-Mercury-MP1-added.patch)                                         | Add MP1 devicetree to Makefile |
 | [0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0004-PolarFire-SoC-I2C-driver-modification-for-zero-sized.patch) | Remove check in Microchip I2C driver to allow wakeup of atsha204a by transmitting only 1 byte |
 | [0005-Bugfix-for-atsha204a-driver.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0005-Bugfix-for-atsha204a-driver.patch)                                                   | Fix wakeup sequence in atsha204a driver |
-| [0006-Use-only-high-memory-region.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0006-Use-only-high-memory-region.patch)                                                   | Modifications to allow booting from address > 4Gbyte |
-| [0007-Rename-mpfs-devicetree.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0007-Rename-mpfs-devicetree.patch)                                                             | Rename microchip-mpfs.dtsi to mpfs.dtsi to be able to reuse the devicetree from Linux kernel |
-| [0008-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/patches/0008-SI5338-configuration.patch)                                                                 | Add configuration of SI5338 clock generator in U-Boot |
+| [0006-Rename-mpfs-devicetree.patch](meta-enclustra-module/recipes-bsp/u-boot/patches/0006-Rename-mpfs-devicetree.patch)                                                             | Rename microchip-mpfs.dtsi to mpfs.dtsi to be able to reuse the devicetree from Linux kernel |
+| [0007-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/patches/0007-SI5338-configuration.patch)                                                                 | Add configuration of SI5338 clock generator in U-Boot |
 
 ### Linux Kernel
 
@@ -219,6 +219,16 @@ Following Linux kernel patches are added.
 | [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-module/recipes-kernel/linux/files/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
 
 ## Additional Information
+
+### Memory layout
+
+The 2Gbyte available memory of the me-mp1-250-si-d3en and me-mp1-250-si-d3en-e1 modules is accessible at following physical addresses.
+
+| Address      | Size     | DDR Memory Address offset | Comment |
+|--------------|----------|---------------------------|---------------------|
+| 0xc0000000   | 64Mbyte  | 0x0                       | Reserved for DMA |
+| 0x84000000   | 960Mbyte | 0x4000000                 | |
+| 0x1000000000 | 1Gbyte   | 0x40000000                | |
 
 ### Ethernet MAC address configuration
 
@@ -320,18 +330,6 @@ Multiple I2C buses are available in U-Boot and Linux. The table below shows all 
 | 1   | MSS bank 2 MSSIO26/27 | MSS I2C_1       | connected to bus 0 on Mercury+ MP1 module |
 | 2   | GPIO bank 7 L10/K10   | CoreI2C in FPGA | Only available on Mercury+ PE3 and Mercury+ ST1 base board / not available in U-Boot |
 
-### Updating FPGA from Linux
-
-```
-# echo 1 > /sys/class/firmware/mpfs-auto-update/loading
-# cat ME-MP1-250-SI-D3EN.bin > /sys/class/firmware/mpfs-auto-update/data
-# echo 0 > /sys/class/firmware/mpfs-auto-update/loading
-```
-
-After reboot, the new image is loaded when auto-update in the current bitstream is enabled and when the design version of the bitstream written to the SPI flash is set to a higher number than the current bitstream.
-
-root@refdes-me-mp1-250-si-d3en-e1-pe1:~#
-
 ## Known Issues:
 
 #### Minimal I2C Frequency
@@ -352,7 +350,7 @@ The clock frequency of the I2C bus is derived from the MSS AHB/APB bus clock. Th
 
 #### 2024.09
 
-- DDR4 memory layout changed from 2Gbyte at address 0x1000000000 to 1 Gyte each at address 0x80000000 and 0x1000000000.
+- DDR4 memory layout changed
 - Reset in U-Boot fixed
 - FPGA SPI flash is now accessible in Linux
 - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed
