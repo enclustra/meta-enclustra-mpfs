@@ -60,8 +60,8 @@ index 0000000000..e7853ebe1b
 +	default "enclustra_mercury_mp1"
 +
 +config TEXT_BASE
-+	default 0x80000000 if !RISCV_SMODE
-+	default 0x80200000 if RISCV_SMODE
++	default 0x84000000 if !RISCV_SMODE
++	default 0x84200000 if RISCV_SMODE
 +
 +config BOARD_SPECIFIC_OPTIONS
 +	def_bool y
@@ -256,7 +256,7 @@ index 0000000000..17d35df125
 +
 +#include <linux/sizes.h>
 +
-+#define CONFIG_SYS_SDRAM_BASE       0x80000000
++#define CONFIG_SYS_SDRAM_BASE       0x84000000
 +
 +/* Environment options */
 +

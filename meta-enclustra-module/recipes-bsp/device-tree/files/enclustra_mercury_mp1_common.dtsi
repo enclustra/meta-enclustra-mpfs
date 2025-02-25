@@ -74,6 +74,7 @@
 &mmc {
 	status = "okay";
 	disable-wp;
+	dma-noncoherent;
 
 	/* SD card */
 	bus-width = <4>;
@@ -118,6 +119,7 @@
 	status = "okay";
 	/delete-property/ mac-address;
 	/delete-property/ local-mac-address;
+	dma-noncoherent;
 	phy-mode = "sgmii";
 	phy-handle = <&phy3>;
 

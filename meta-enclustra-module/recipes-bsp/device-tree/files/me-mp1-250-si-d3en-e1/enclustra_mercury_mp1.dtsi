@@ -7,21 +7,47 @@
 #include "enclustra_mercury_mp1_common.dtsi"
 
 / {
-	model = "enclustra,me-mp1-250-si-d3en";
+	model = "enclustra,me-mp1-250-si-d3en-e1";
 
 	aliases {
 		ethernet0 = &mac1;
 	};
 
-	/* 1 Gbyte DDR4 memory in 32bit addressable memory */
-	mss_memory_low: memory@80000000 {
+	/* 64Mbyte non-cached memory for DMA */
+	ddr_non_cached_high: memory@c0000000 {
 		device_type = "memory";
-		reg = <0x0 0x80000000 0x0 0x40000000>;
+		reg = <0x0 0xc0000000 0x0 0x4000000>;
 	};
 
-	/* 1 Gbyte DDR4 memory in 64bit addressable memory */
+	/* 960 Mbyte DDR4 memory in 32bit addressable range */
+	mss_memory_low: memory@84000000 {
+		device_type = "memory";
+		reg = <0x0 0x84000000 0x0 0x3a000000>;
+	};
+
+	/* 1024 Mbyte DDR4 memory in 64bit addressable range */
 	mss_memory_high: memory@1000000000 {
 		device_type = "memory";
 		reg = <0x10 0x0 0x0 0x40000000>;
+	};
+
+	soc {
+		dma-ranges = <0x14 0x0        0x0  0xc0000000 0x0 0x4000000>,
+		             <0x14 0x4000000  0x0  0x84000000 0x0 0x3a000000>,
+		             <0x14 0x40000000 0x10 0x0        0x0 0x40000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		dma_non_cached_low: dma_memory@c0000000 {
+			compatible = "shared-dma-pool";
+			size = <0x0 0x4000000>;
+			no-map;
+			linux,dma-default;
+			alloc-ranges = <0x0 0xc0000000 0x0 0x4000000>;
+		};
 	};
 };
