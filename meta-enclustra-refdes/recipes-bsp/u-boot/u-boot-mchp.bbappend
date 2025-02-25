@@ -16,7 +16,7 @@ SRC_URI:append:me-st1-generic = " \
     "
 
 SRC_URI:append:me-mp1-generic := " \
-    file://0008-SI5338-configuration.patch \
+    file://0007-SI5338-configuration.patch \
     file://Si5338-RevB-Registers.h \
     file://clockgen.cfg \
     "
