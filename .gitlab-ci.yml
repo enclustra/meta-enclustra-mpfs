@@ -11,7 +11,7 @@ build_image:
     parallel:
         matrix:
             - BASEBOARD: ["st1", "pe1", "pe3"]
-            - MODULE: ["me-mp1-250-si-d3en", "me-mp1-250-si-d3en-e1"]
+              MODULE: ["me-mp1-250-si-d3en", "me-mp1-250-si-d3en-e1"]
     rules:
         - when: manual
     timeout: 1 hours
