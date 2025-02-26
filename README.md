@@ -14,7 +14,7 @@ See [License](meta-enclustra-module/COPYING.MIT)
 |------------|---------|---------------------------------------------------------------------------------|
 | 07.10.2022 | 2021.11 | First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
 | 24.10.2022 | 2022.09 | Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
-| 11.02.2025 | 2024.09 | Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
+| 26.02.2025 | 2024.09 | Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
 
 ## Description
 
@@ -40,7 +40,7 @@ The HSS software with support for Mercury+ MP1 can be found in following reposit
 
 - [Hart Software Services](https://github.com/enclustra/hart-software-services)
 
-Only branch 2024.09 is supported.
+Make sure to use the correct version to ensure compatibility. As example: use branch 2024.09 in both repositories.
 
 ## Host Requirements
 
@@ -78,8 +78,8 @@ To reuse the downloaded files and built packages for further builds, the **DL_DI
 
 As example:
 
-    export SSTATE_DIR="${HOME}/Desktop/riscv-sstate-cache"
-    export DL_DIR="${HOME}/Desktop/yocto-downloads"
+    export SSTATE_DIR="${HOME}/yocto-cache/riscv64-kirkstone/riscv-sstate-cache"
+    export DL_DIR="${HOME}/yocto-cache/riscv64-kirkstone/yocto-downloads"
 
 ### KAS
 
@@ -144,7 +144,7 @@ Login with **root** as user name, no password is set.
 
 ## Devicetree
 
-Linux and U-Boot use the same devicetree source files to prevent from maintaining two separate devicetree sources.
+Linux and U-Boot share most of the devicetree source files to avoid duplicated code.
 This is achieved by linking the kernel devicetree sources to U-Boot in the meta-enclustra-mpfs layers.
 
 Following list show all devicetree include files added by meta-enclustra-module layer:
@@ -168,9 +168,19 @@ Following list show all devicetree include files added by meta-enclustra-refdes 
 | [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for ST1 reference designs |
   [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for Linux |
   [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/u-boot/devicetree/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for U-Boot |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-pe1-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE1 base board specific devicetree properties |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-pe3-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE3 base board specific devicetree properties |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/me-st1-generic/files/enclustra_mercury_baseboard.dtsi)          | Mercury+ ST1 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ PE1 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ PE3 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ ST1 base board specific devicetree properties |
+
+The devicetree uses following file structure:
+
+    enclustra_mercury_mp1.dts
+    ├── enclustra_mercury_mp1.dtsi                           -> Depending on product model: me-mp1-250-si-d3en or me-mp1-250-si-d3en-e1
+    │    └── enclustra_mercury_mp1_common.dtsi
+    │        └── mpfs.dtsi                                   -> Provided in kernel sources
+    ├─────── enclustra_mercury_baseboard.dtsi                -> Depending on reference design: PE1, ST1 or PE3
+    └─────── enclustra_mercury_mp1_fabric.dtsi               -> Depending on reference design: PE1, ST1 or PE3
+             └── enclustra_mercury_mp1_common_fabric.dtsi
 
 ### Modification for eMMC boot
 
@@ -178,7 +188,7 @@ On the Mercury+ MP1 product series, the MSS MMC controller is connected through 
 
 The default devicetree works for both SD card and eMMC memory, but the eMMC performance is limited. The devicetree needs to be modified for full eMMC support (use of 8 data lanes instead of only 4) with the disadvantage that SD card is not supported anymore.
 
-In file [meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi) in 'mmc' node, following settings needs to be removed or commented out:
+In file [enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi) in 'mmc' node, following settings needs to be removed or commented out:
 
 	/* SD card */
 	bus-width = <4>;
@@ -214,9 +224,9 @@ Following U-Boot patches are added.
 
 Following Linux kernel patches are added.
 
-| Patch Name                                                                                                                                                                          | Description |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-module/recipes-kernel/linux/files/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
+| Patch Name                                                                                                                                                                            | Description |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-module/recipes-kernel/linux/patches/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
 
 ## Additional Information
 
@@ -224,11 +234,11 @@ Following Linux kernel patches are added.
 
 The 2Gbyte available memory of the me-mp1-250-si-d3en and me-mp1-250-si-d3en-e1 modules is accessible at following physical addresses.
 
-| Address      | Size     | DDR Memory Address offset | Comment |
-|--------------|----------|---------------------------|---------------------|
-| 0xc0000000   | 64Mbyte  | 0x0                       | Reserved for DMA |
-| 0x84000000   | 960Mbyte | 0x4000000                 | |
-| 0x1000000000 | 1Gbyte   | 0x40000000                | |
+| Address        | Size      | DDR Memory Address Offset | Comment |
+|----------------|-----------|---------------------------|---------------------|
+| 0xc000'0000    | 64 Mbyte  | 0x0                       | Reserved for DMA |
+| 0x8400'0000    | 960 Mbyte | 0x400'0000                | |
+| 0x10'0000'0000 | 1 Gbyte   | 0x4000'0000               | |
 
 ### Ethernet MAC address configuration
 
@@ -271,7 +281,7 @@ The 512 bits of the OTP region are reported as follows:
 
 ### Rootfs Partition Size
 
-The size of the rootfs partition is set to 132 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
+The size of the rootfs partition is set to 132 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
 
 ```
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 132M
@@ -279,7 +289,7 @@ part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 
 
 ### Configure SI5338 clock generator on Mercury+ PE1 and Mercury+ ST1 base board
 
-The U-Boot patch [0008-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/files/0008-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
+The U-Boot patch [0007-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/patches/0007-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
 
 1. Create a configuration with Skyworks [ClockBuilder Pro software](https://www.skyworksinc.com/Application-Pages/Clockbuilder-Pro-Software) and export the C code header file.
 2. Copy the exported header file to **meta-enclustra-refdes/recipe_bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-refdes/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
