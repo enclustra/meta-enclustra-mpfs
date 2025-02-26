@@ -12,14 +12,14 @@ See [License](meta-enclustra-module/COPYING.MIT)
 
 | Date       | Version | Comment                                                                         |
 |------------|---------|---------------------------------------------------------------------------------|
-| 07.10.2022 | 2021.11 | First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
-| 24.10.2022 | 2022.09 | Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
-| 26.02.2025 | 2024.09 | Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
+| 26.02.2025 | 2024.09 | - Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
+| 24.10.2022 | 2022.09 | - Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
+| 07.10.2022 | 2021.11 | - First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
 
 ## Description
 
 This repository contains Yocto layers to generate Linux reference designs for the [Enclustra Mercury+ MP1 product series](https://www.enclustra.com/en/products/system-on-chip-modules/mercury-mp1/).
-The Yocto layers can be included into own projects or the provided [build.yml](build.yml) can be used to build a design using [kas](https://kas.readthedocs.io/en/latest/#) tool.
+The Yocto layers can be included into own projects or the provided file [build.yml](build.yml) can be used to build a design using [kas](https://kas.readthedocs.io/en/latest/#) tool.
 The reference design is based on [meta-polarfire-soc-yocto-bsp](https://github.com/polarfire-soc/meta-polarfire-soc-yocto-bsp) release 2024.09 that uses following versions.
 
 - Yocto: kirkstone
@@ -74,7 +74,7 @@ The product model and base board can be specified as target device (variable: **
 
 ### Accelerate Build
 
-To reuse the downloaded files and built packages for further builds, the **DL_DIR** and **SSTATE_DIR** variable can be set to a local directory. If this project is built for the first time, these directories must be created manually. If the variables are not set, the default directories in the build directory are used.
+To reuse the downloaded files and built packages for further builds, the **DL_DIR** and **SSTATE_DIR** variable can be set to a local directory. If this project is built for the first time, these directories must be created manually before the build is started. If the variables are not set, the default directories in the build directory are used.
 
 As example:
 
@@ -83,7 +83,7 @@ As example:
 
 ### KAS
 
-The recommended build flow is to use kas, which is a Python based tool that provides an easy mechanism to setup a bitbake project. The configuration file [build.yml](build.yml) provides all required settings. See [documentation](https://kas.readthedocs.io/en/latest/command-line.html) for more details.
+The recommended build flow is to use kas, which is a Python based tool that provides an easy mechanism to setup a bitbake project. The configuration file [build.yml](build.yml) provides all required settings. See [kas documentation](https://kas.readthedocs.io/en/latest/command-line.html) for more details.
 
 #### Installation
 
@@ -117,7 +117,7 @@ The tool kas can be used to checkout the repositories and setup the build direct
 
 ## Deployment
 
-The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-refdes-me-mp1-250-si-d3en-pe1.wic**.
+The OpenEmbedded Image Creator (wic) creates a partitioned image file for SD card/eMMC. The partitions are configured in the OpenEmbedded kickstart file ([enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks)). The image file to be deployed on SD card/eMMC can be found in **build/tmp-glibc/deploy/images/\<MACHINE\>** directory, e.g. **image-minimal-hwtest-refdes-me-mp1-250-si-d3en-pe1.wic**.
 
 To be able to boot Linux, the SoC must be programmed with the [bitstream](#fpga-reference-designs-for-microchip-libero) and [HSS](#hart-software-services).
 
@@ -151,40 +151,40 @@ Following list show all devicetree include files added by meta-enclustra-module 
 
 | File name                                                                                                                                        | Description |
 |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [enclustra_mercury_mp1.dts](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree placeholder. File is replaced by meta-enclustra-refdes |
+| [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dtsi)                  | Contains nodes and properties that are specific to the me-mp1-250-si-d3en product model as DDR4 memory size |
+| [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1.dtsi)               | Contains nodes and properties that are specific to the me-mp1-250-si-d3en-e1 product model as DDR4 memory size |
 | [enclustra_mercury_mp1_common.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common.dtsi)                       | Common definitions that are valid for all Mercury+ MP1 product models |
 | [enclustra_mercury_mp1_common_fabric.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1_common_fabric.dtsi)         | Common definitions for FPGA fabric nodes that are valid for all Mercury+ MP1 product models |
-| [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en/enclustra_mercury_mp1.dtsi)                  | Contains nodes and properties that are specific to the me-mp1-250-si-d3en product model as DDR4 memory size |
-  [enclustra_mercury_mp1.dtsi](meta-enclustra-module/recipes-bsp/device-tree/files/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1.dtsi)               | Contains nodes and properties that are specific to the me-mp1-250-si-d3en-e1 product model as DDR4 memory size |
-  [enclustra_mercury_mp1.dts](meta-enclustra-module/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree placeholder. File is replaced by meta-enclustra-refdes |
-  [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en/enclustra_mercury_mp1-u-boot.dtsi)    | U-Boot include file for me-mp1-250-si-d3en |
-  [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1-u-boot.dtsi) | U-Boot include file for me-mp1-250-si-d3en-e1 |
+| [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en/enclustra_mercury_mp1-u-boot.dtsi)    | U-Boot include file for me-mp1-250-si-d3en |
+| [enclustra_mercury_mp1-u-boot.dtsi](meta-enclustra-module/recipes-bsp/u-boot/devicetree/me-mp1-250-si-d3en-e1/enclustra_mercury_mp1-u-boot.dtsi) | U-Boot include file for me-mp1-250-si-d3en-e1 |
 
 Following list show all devicetree include files added by meta-enclustra-refdes layer:
 
 | File name                                                                                                                                        | Description |
 |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for Linux |
+| [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/u-boot/devicetree/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for U-Boot |
 | [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for PE1 reference designs |
 | [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for PE3 reference designs |
 | [enclustra_mercury_mp1_fabric.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_mp1_fabric.dtsi)        | Devicetree nodes in FPGA fabric for ST1 reference designs |
-  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/device-tree/files/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for Linux |
-  [enclustra_mercury_mp1.dts](meta-enclustra-refdes/recipes-bsp/u-boot/devicetree/enclustra_mercury_mp1.dts)                                       | Top level devicetree file for U-Boot |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ PE1 base board specific devicetree properties |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ PE3 base board specific devicetree properties |
-| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/files/enclustra_mercury_baseboard.dtsi)    | Mercury+ ST1 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe1-generic/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE1 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-pe3-generic/enclustra_mercury_baseboard.dtsi)          | Mercury+ PE3 base board specific devicetree properties |
+| [enclustra_mercury_baseboard.dtsi](meta-enclustra-refdes/recipes-bsp/device-tree/files/me-st1-generic/enclustra_mercury_baseboard.dtsi)          | Mercury+ ST1 base board specific devicetree properties |
 
 The devicetree uses following file structure:
 
     enclustra_mercury_mp1.dts
     ├── enclustra_mercury_mp1.dtsi                           -> Depending on product model: me-mp1-250-si-d3en or me-mp1-250-si-d3en-e1
     │    └── enclustra_mercury_mp1_common.dtsi
-    │        └── mpfs.dtsi                                   -> Provided in kernel sources
+    │        └── mpfs.dtsi                                   -> Provided by kernel sources
     ├─────── enclustra_mercury_baseboard.dtsi                -> Depending on reference design: PE1, ST1 or PE3
     └─────── enclustra_mercury_mp1_fabric.dtsi               -> Depending on reference design: PE1, ST1 or PE3
              └── enclustra_mercury_mp1_common_fabric.dtsi
 
 ### Modification for eMMC boot
 
-On the Mercury+ MP1 product series, the MSS MMC controller is connected through a multiplexer to a eMMC memory located on the module and to an SD card slot located on the base board. During the boot process, the HSS selects one of the two devices depending on if an SD card is inserted in the SD card slot. If an SD card is inserted, the system boots from SD card, otherwise it boots from eMMC.
+On the Mercury+ MP1 product series, the MSS MMC controller is connected through a multiplexer to an eMMC memory located on the module and to an SD card slot located on the base board. During the boot process, the HSS selects one of the two devices depending on if an SD card is inserted in the SD card slot. If an SD card is inserted, the system boots from SD card, otherwise it boots from eMMC.
 
 The default devicetree works for both SD card and eMMC memory, but the eMMC performance is limited. The devicetree needs to be modified for full eMMC support (use of 8 data lanes instead of only 4) with the disadvantage that SD card is not supported anymore.
 
@@ -230,9 +230,9 @@ Following Linux kernel patches are added.
 
 ## Additional Information
 
-### Memory layout
+### Memory Layout
 
-The 2Gbyte available memory of the me-mp1-250-si-d3en and me-mp1-250-si-d3en-e1 modules is accessible at following physical addresses.
+The 2 Gbyte available memory of the me-mp1-250-si-d3en and me-mp1-250-si-d3en-e1 modules is accessible at following physical addresses.
 
 | Address        | Size      | DDR Memory Address Offset | Comment |
 |----------------|-----------|---------------------------|---------------------|
@@ -254,7 +254,7 @@ The serial number is reported as follows:
 
     248173
 
-### Read OTP region of EEPROM
+### Read OTP Region of EEPROM
 
 The one time programmable region of the EEPROM contains the serial number, MAC address and information about the module. A detailed description can be found in the user manual of the module. The entire region can be read by following command:
 
@@ -287,17 +287,17 @@ The size of the rootfs partition is set to 132 Mbyte by default. To change the p
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 132M
 ```
 
-### Configure SI5338 clock generator on Mercury+ PE1 and Mercury+ ST1 base board
+### Configure SI5338 Clock Generator on Mercury+ PE1 and Mercury+ ST1 Base Board
 
 The U-Boot patch [0007-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/patches/0007-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
 
 1. Create a configuration with Skyworks [ClockBuilder Pro software](https://www.skyworksinc.com/Application-Pages/Clockbuilder-Pro-Software) and export the C code header file.
 2. Copy the exported header file to **meta-enclustra-refdes/recipe_bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-refdes/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
-3. Make following changes to file [meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg](meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg):
+3. Make following changes to file [clockgen.cfg](meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg):
 
        CONFIG_SI5338_CONFIGURATION=y
 
-### SPI Flash access
+### SPI Flash Access
 
 If the BOOT_MODE0 pin on Mercury+ MP1 modules is driven to logic '1' or left unconnected, the FPGA SPI flash is connected to the SoC device. It can be accessed in Linux via its MTD partition. As shown below, mtd0 is the QSPI flash connected to the MSS pins and mtd1 is the SPI flash connected via FPGA system controller.
 
@@ -334,10 +334,10 @@ Device is writable:             true
 
 Multiple I2C buses are available in U-Boot and Linux. The table below shows all relevant information. The default speed it set to 100kHz.
 
-| bus | pins                  | master          | comment |
+| Bus | Pins                  | Master          | Comment |
 |-----|-----------------------|-----------------|---------|
-| 0   | GPIO bank 1 E7/F7     | MSS I2C_0       | connected to bus 1 on Mercury+ MP1 module |
-| 1   | MSS bank 2 MSSIO26/27 | MSS I2C_1       | connected to bus 0 on Mercury+ MP1 module |
+| 0   | GPIO bank 1 E7/F7     | MSS I2C_0       | |
+| 1   | MSS bank 2 MSSIO26/27 | MSS I2C_1       | |
 | 2   | GPIO bank 7 L10/K10   | CoreI2C in FPGA | Only available on Mercury+ PE3 and Mercury+ ST1 base board / not available in U-Boot |
 
 ## Known Issues:
