@@ -13,12 +13,6 @@
 		ethernet0 = &mac1;
 	};
 
-	/* 64Mbyte non-cached memory for DMA */
-	ddr_non_cached_high: memory@c0000000 {
-		device_type = "memory";
-		reg = <0x0 0xc0000000 0x0 0x4000000>;
-	};
-
 	/* 960 Mbyte DDR4 memory in 32bit addressable range */
 	mss_memory_low: memory@84000000 {
 		device_type = "memory";
@@ -29,6 +23,12 @@
 	mss_memory_high: memory@1000000000 {
 		device_type = "memory";
 		reg = <0x10 0x0 0x0 0x40000000>;
+	};
+
+	/* 64Mbyte non-cached memory for DMA */
+	ddr_non_cached_high: memory@c0000000 {
+		device_type = "memory";
+		reg = <0x0 0xc0000000 0x0 0x4000000>;
 	};
 
 	soc {
