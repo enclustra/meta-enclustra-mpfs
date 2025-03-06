@@ -12,7 +12,7 @@ See [License](meta-enclustra-module/COPYING.MIT)
 
 | Date       | Version | Comment                                                                         |
 |------------|---------|---------------------------------------------------------------------------------|
-| 26.02.2025 | 2024.09 | - Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
+| 06.03.2025 | 2024.09 | - Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
 | 24.10.2022 | 2022.09 | - Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
 | 07.10.2022 | 2021.11 | - First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
 
@@ -28,7 +28,7 @@ The reference design is based on [meta-polarfire-soc-yocto-bsp](https://github.c
 
 ## FPGA Reference Designs for Microchip Libero
 
-The generated binaries are compatible with the FPGA and MSS configuration of following reference designs:
+The generated binaries are compatible with release 2024.2_v1.1.0 of the FPGA and MSS configuration of following reference designs:
 
 - [Mercury+ MP1 PE1 Reference Design](https://github.com/enclustra/Mercury_MP1_PE1_Reference_Design)
 - [Mercury+ MP1 PE3 Reference Design](https://github.com/enclustra/Mercury_MP1_PE3_Reference_Design)
@@ -40,7 +40,7 @@ The HSS software with support for Mercury+ MP1 can be found in following reposit
 
 - [Hart Software Services](https://github.com/enclustra/hart-software-services)
 
-Make sure to use the correct version to ensure compatibility. As example: use branch 2024.09 in both repositories.
+Make sure to use branch 2024.09 in combination with this release.
 
 ## Host Requirements
 
@@ -63,18 +63,18 @@ See [Yocto System Requirements](https://docs.yoctoproject.org/kirkstone/ref-manu
 
 ### Supported Machine Targets
 
-The product model and base board can be specified as target device (variable: **MACHINE**). Following targets are supported:
+The product model of the module and base board can be specified as target device (variable: **MACHINE**). Following targets are supported:
 
-- refdes-me-mp1-250-si-d3en-e1-pe1.conf
-- refdes-me-mp1-250-si-d3en-e1-pe3.conf
-- refdes-me-mp1-250-si-d3en-e1-st1.conf
-- refdes-me-mp1-250-si-d3en-pe1.conf
-- refdes-me-mp1-250-si-d3en-pe3.conf
-- refdes-me-mp1-250-si-d3en-st1.conf
+- refdes-me-mp1-250-si-d3en-e1-pe1
+- refdes-me-mp1-250-si-d3en-e1-pe3
+- refdes-me-mp1-250-si-d3en-e1-st1
+- refdes-me-mp1-250-si-d3en-pe1
+- refdes-me-mp1-250-si-d3en-pe3
+- refdes-me-mp1-250-si-d3en-st1
 
 ### Accelerate Build
 
-To reuse the downloaded files and built packages for further builds, the **DL_DIR** and **SSTATE_DIR** variable can be set to a local directory. If this project is built for the first time, these directories must be created manually before the build is started. If the variables are not set, the default directories in the build directory are used.
+To reuse the downloaded files and built packages for further builds, the **DL_DIR** and **SSTATE_DIR** variabless can be set to a local directory. If this project is built for the first time, these directories must be created manually before the build is started. If the variables are not set, the default directories in the build directory are used.
 
 As example:
 
@@ -281,10 +281,10 @@ The 512 bits of the OTP region are reported as follows:
 
 ### Rootfs Partition Size
 
-The size of the rootfs partition is set to 132 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
+The size of the rootfs partition is set to 128 Mbyte by default. To change the partition size, the OpenEmbedded kickstart file [enclustra-mercury-mp1.wks](meta-enclustra-refdes/wic/enclustra-mercury-mp1.wks) needs to be modified. The partition size is defined by **--fixed-size** parameter as shown below.
 
 ```
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 132M
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 --fixed-size 128M
 ```
 
 ### Configure SI5338 Clock Generator on Mercury+ PE1 and Mercury+ ST1 Base Board
@@ -292,7 +292,7 @@ part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096 
 The U-Boot patch [0007-SI5338-configuration.patch](meta-enclustra-refdes/recipes-bsp/u-boot/patches/0007-SI5338-configuration.patch) adds support to configure the clock generator device. To enable the configuration, follow the steps below:
 
 1. Create a configuration with Skyworks [ClockBuilder Pro software](https://www.skyworksinc.com/Application-Pages/Clockbuilder-Pro-Software) and export the C code header file.
-2. Copy the exported header file to **meta-enclustra-refdes/recipe_bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-refdes/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
+2. Copy the exported header file to **meta-enclustra-refdes/recipes-bsp/u-boot/files/** directory and overwrite the example file [Si5338-RevB-Registers.h](meta-enclustra-refdes/recipes-bsp/u-boot/files/Si5338-RevB-Registers.h)
 3. Make following changes to file [clockgen.cfg](meta-enclustra-refdes/recipes-bsp/u-boot/files/clockgen.cfg):
 
        CONFIG_SI5338_CONFIGURATION=y
@@ -334,11 +334,11 @@ Device is writable:             true
 
 Multiple I2C buses are available in U-Boot and Linux. The table below shows all relevant information. The default speed it set to 100kHz.
 
-| Bus | Pins                  | Master          | Comment |
-|-----|-----------------------|-----------------|---------|
-| 0   | GPIO bank 1 E7/F7     | MSS I2C_0       | |
-| 1   | MSS bank 2 MSSIO26/27 | MSS I2C_1       | |
-| 2   | GPIO bank 7 L10/K10   | CoreI2C in FPGA | Only available on Mercury+ PE3 and Mercury+ ST1 base board / not available in U-Boot |
+| Bus | Pins                       | Master          | Comment |
+|-----|----------------------------|-----------------|---------|
+| 0   | GPIO bank 1, pin E7/F7     | MSS I2C_0       | |
+| 1   | MSS bank 2, pin MSSIO26/27 | MSS I2C_1       | |
+| 2   | GPIO bank 7, pin L10/K10   | CoreI2C in FPGA | Only available on Mercury+ PE3 and Mercury+ ST1 base board / not available in U-Boot |
 
 ## Known Issues:
 
