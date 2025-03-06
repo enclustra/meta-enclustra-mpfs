@@ -227,6 +227,7 @@ Following Linux kernel patches are added.
 | Patch Name                                                                                                                                                                            | Description |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch](meta-enclustra-module/recipes-kernel/linux/patches/0001-Add-atsha204a-driver-with-support-to-read-OTP-region.patch) | Add driver to read serial number from EEPROM |
+| [0002-spi-microchip-core-prevent-RX-overflows-when-transmi.patch](meta-enclustra-module/recipes-kernel/linux/patches/0002-spi-microchip-core-prevent-RX-overflows-when-transmi.patch) | Bugfix for SPI driver |
 
 ## Additional Information
 
