@@ -12,8 +12,8 @@ See [License](meta-enclustra-module/COPYING.MIT)
 
 | Date       | Version | Comment                                                                         |
 |------------|---------|---------------------------------------------------------------------------------|
-| 06.03.2025 | 2024.09 | - Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed |
-| 24.10.2022 | 2022.09 | - Update to meta-polarfire-soc-yocto-bsp 2022.09                                  |
+| 06.03.2025 | 2024.09 | - Update to meta-polarfire-soc-yocto-bsp 2024.09 <br> - DDR4 memory layout changed <br> - Reset in U-Boot fixed <br> - FPGA SPI flash is now accessible in Linux <br> - Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed <br> - Single Yocto layer split into module and reference design layers <br> - I2C driver enabled for PL I2C in ST1 and PE3 reference designs <br> - GPIO driver enabled for all GPIOs in reference design |
+| 24.10.2022 | 2022.09 | - Update to meta-polarfire-soc-yocto-bsp 2022.09 - SI5338 configuratiton added in U-Boot <br> - MSS QSPI flash is now accessible in Linux |
 | 07.10.2022 | 2021.11 | - First version with meta-polarfire-soc-yocto-bsp 2021.11 used for MP1 validation |
 
 ## Description
@@ -347,24 +347,3 @@ Multiple I2C buses are available in U-Boot and Linux. The table below shows all 
 
 The clock frequency of the I2C bus is derived from the MSS AHB/APB bus clock. This clock is set to 150MHz by default. Because the biggest possible divider value is 960, the slowest possible I2C frequency is 150MHz/960=156.25kHz. With this
 156.25kHz I2C clock frequency, the wake-up pulse duration of the Atmel ATSHA204a device is violated (52us instead of 60us). Measurements has shown that the device wakes up reliable when the wake-up pulse is bigger than 30us.
-
-## Changelog:
-
-#### 2021.11
-
-- First release
-
-#### 2022.09
-
-- SI5338 configuratiton added in U-Boot
-- MSS QSPI flash is now accessible in Linux
-
-#### 2024.09
-
-- DDR4 memory layout changed
-- Reset in U-Boot fixed
-- FPGA SPI flash is now accessible in Linux
-- Support for me-mp1-460-1si-d4e and me-mp1-250-ees-d3e removed
-- Single Yocto layer split into module and reference design layers
-- I2C driver enabled for PL I2C in ST1 and PE3 reference designs
-- GPIO driver enabled for all GPIOs in reference design
